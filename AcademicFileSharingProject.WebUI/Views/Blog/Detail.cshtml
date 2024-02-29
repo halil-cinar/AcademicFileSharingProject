@@ -1,0 +1,57 @@
+﻿@{
+    ViewData["Title"] = "Detail";
+    ViewData["pageName"] = "/blog";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model BlogListDto
+<div>
+    <div class="card container">
+        <img src="@((Model.MediaId!=null)?"/Media/"+Model.MediaId:"/Media/"+(long)EMediaKey.None)" style="height: 500px;" class="card-img-top " alt="...">
+        <div class="card-body">
+            <h5 class="card-title">@Model.Title</h5>
+            <pre class="format-text  card-text">@Model.Content</pre>
+            <ul class="list-group">
+                @for (int i = 0; i < (Model.BlogComments?.Count ?? 0); i++)
+                {
+                    var item = Model.BlogComments[i];
+                    <li class="list-group-item">
+                        <div class="card mb-3">
+                            <div class="row g-0 align-items-center">
+                                <div class="col-3 col-sm-2 col-lg-1 p-2">
+                                    <img src="@((item.SenderUser.ProfileImageId!=null)?$"/Media/{item.SenderUser.ProfileImageId}":"/Media/"+(long)EMediaKey.Person)" class="img-fluid rounded" alt="...">
+                                </div>
+                                <div class=" col-9 col-sm-10 col-lg-11">
+                                    <div class="card-body">
+                                        <h5 class="card-title">@item.SenderUser?.Name @item.SenderUser?.Surname</h5>
+                                        <p class="card-text">@item.Content</p>
+                                        <p class="card-text"><small class="text-muted"> @item.CreatedTime.ToShortDateString() @item.CreatedTime.ToShortTimeString()</small></p>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </li>
+                }
+                <li class="list-group-item">
+                            <form method="get" action="/Blog/AddComment">
+                            <div class="form-floating">
+                            <input type="hidden" value="@Model.Id" name="BlogId"/>
+                            <textarea name="Content" class="form-control" style="resize: none; height: 100px;" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
+                                <label for="floatingTextarea2">Yorumunuzu yazınız</label>
+                            </div>
+                            <button type="submit" class="btn btn-secondary">Cevapla</button>
+
+                            </form>
+
+                        </li>
+
+
+            </ul>
+        </div>
+    </div>
+</div>
+

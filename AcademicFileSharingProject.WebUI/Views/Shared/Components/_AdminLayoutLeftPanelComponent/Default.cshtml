@@ -1,0 +1,233 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using AcademicFileSharingProject.Business.Abstract;
+@using AcademicFileSharingProject.Entities.Enums
+@inject IAccountService _accountService
+@inject IHttpContextAccessor _httpContextAccessor
+@{
+    var sessionKey = _httpContextAccessor.HttpContext.Request.Cookies["SessionKey"];
+    ViewBag.HasSession = sessionKey != null;
+    if (sessionKey != null)
+    {
+        var result = await _accountService.GetSession(sessionKey);
+
+        if (result.ResultStatus == AcademicFileSharingProject.Dtos.Enums.ResultStatus.Success)
+        {
+            ViewBag.User = result.Result?.User;
+
+            var userMethodsResult = await _accountService.GetUserRoleMethods(result.Result?.UserId ?? -1);
+            if (userMethodsResult.ResultStatus == AcademicFileSharingProject.Dtos.Enums.ResultStatus.Success)
+            {
+                ViewBag.userMethods = userMethodsResult.Result;
+            }
+            else
+            {
+                ViewBag.userMethods = new List<EMethod>();
+            }
+
+        }
+    }
+
+}
+@{
+
+}
+<aside id="left-panel" class="left-panel">
+    <nav class="navbar navbar-expand-sm navbar-default">
+        <div id="main-menu" class="main-menu collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="/"><i class="menu-icon fa fa-laptop"></i>Dashboard </a>
+                </li>
+                <li class="menu-title">Profil Ayarları</li><!-- /.menu-title -->
+                <li class="menu-item-has-children dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-cogs"></i>Profil Düzenleme</a>
+                    <ul class="sub-menu children dropdown-menu">
+                        <li><i class="fa fa-puzzle-piece"></i><a href="/Admin/Profile">Profilimi Düzenle</a></li>
+                        <li><i class="fa fa-id-badge"></i><a href="/Admin/Profile/ChangePassword">Şifremi Değiştir</a></li>
+                    </ul>
+                </li>
+
+
+                @if (ViewBag.userMethods.Contains(EMethod.UserAllList)
+                || ViewBag.userMethods.Contains(EMethod.AcademicianAllList)
+                || ViewBag.userMethods.Contains(EMethod.UserAdd)
+                || ViewBag.userMethods.Contains(EMethod.AcademicianAdd)
+                || ViewBag.userMethods.Contains(EMethod.StudentAllList)
+                || ViewBag.userMethods.Contains(EMethod.StudentAdd)
+                || ViewBag.userMethods.Contains(EMethod.UserRoleAllList)
+                || ViewBag.userMethods.Contains(EMethod.UserRoleList)
+                || ViewBag.userMethods.Contains(EMethod.UserRoleUpdate)
+                
+                )
+                {
+                    <li class="menu-title">Kullanıcı İşlemleri</li>
+
+                    <!-- /.menu-title -->
+
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-tasks"></i>Akademisyenler</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            @if (ViewBag.userMethods.Contains(EMethod.UserAdd) || ViewBag.userMethods.Contains(EMethod.AcademicianAdd))
+                            {
+                                <li><i class="menu-icon fa fa-fort-awesome"></i><a href="/Admin/Academician/Add">Akademisyen ekle</a></li>
+                            }
+                            @if (ViewBag.userMethods.Contains(EMethod.UserAllList) || ViewBag.userMethods.Contains(EMethod.AcademicianAllList))
+                            {
+                                <li><i class="menu-icon ti-themify-logo"></i><a href="/Admin/Academician">Akademisyenleri Gör</a></li>
+                            }
+                        </ul>
+                    </li>
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-tasks"></i>Öğrenciler</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            @if (ViewBag.userMethods.Contains(EMethod.UserAdd) || ViewBag.userMethods.Contains(EMethod.AcademicianAdd))
+                            {
+                                <li><i class="menu-icon fa fa-fort-awesome"></i><a href="/Admin/Student/Add">Öğrenci ekle</a></li>
+                            }
+                            @if (ViewBag.userMethods.Contains(EMethod.UserAllList) || ViewBag.userMethods.Contains(EMethod.AcademicianAllList))
+                            {
+                                <li><i class="menu-icon ti-themify-logo"></i><a href="/Admin/Student">Öğrencileri Gör</a></li>
+                            }
+
+                        </ul>
+                    </li>
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-tasks"></i>Rol İşlemleri</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            
+                            @if (ViewBag.userMethods.Contains(EMethod.UserRoleAllList) || ViewBag.userMethods.Contains(EMethod.UserRoleList))
+                            {
+                                <li><i class="menu-icon ti-themify-logo"></i><a href="/Admin/User/Roles">Kullanıcı Rollerini Gör ve Güncelle</a></li>
+                            }
+
+                        </ul>
+                    </li>
+
+                }
+                @if (ViewBag.userMethods.Contains(EMethod.BlogAllList)
+                || ViewBag.userMethods.Contains(EMethod.BlogList)
+                || ViewBag.userMethods.Contains(EMethod.BlogAdd)
+                || ViewBag.userMethods.Contains(EMethod.BlogCommentAllList)
+                || ViewBag.userMethods.Contains(EMethod.BlogCommentList)
+                || ViewBag.userMethods.Contains(EMethod.BlogCommentAdd)
+
+                )
+                {
+                    <li class="menu-title">Blog Ve Haberler</li>
+
+                    <!-- /.menu-title -->
+                    @if (ViewBag.userMethods.Contains(EMethod.BlogAllList) || ViewBag.userMethods.Contains(EMethod.BlogList) || ViewBag.userMethods.Contains(EMethod.BlogAdd))
+                    {
+                        <li class="menu-item-has-children dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-tasks"></i>Blog İşlemleri</a>
+                            <ul class="sub-menu children dropdown-menu">
+                                @if (ViewBag.userMethods.Contains(EMethod.BlogAdd))
+                                {
+                                    <li><i class="menu-icon fa fa-fort-awesome"></i><a href="/Admin/Blog/Add">Blog Paylaş</a></li>
+                                }
+                                @if (ViewBag.userMethods.Contains(EMethod.BlogAllList) || ViewBag.userMethods.Contains(EMethod.BlogList))
+                                {
+                                    <li><i class="menu-icon ti-themify-logo"></i><a href="/Admin/Blog">Bloglerimi Gör</a></li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                    @if (ViewBag.userMethods.Contains(EMethod.BlogCommentAllList) || ViewBag.userMethods.Contains(EMethod.BlogCommentList) || ViewBag.userMethods.Contains(EMethod.BlogCommentAdd))
+                    {
+                        <li class="menu-item-has-children dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-tasks"></i>Blog Yorum İşlemleri</a>
+                            <ul class="sub-menu children dropdown-menu">
+                                @if (ViewBag.userMethods.Contains(EMethod.BlogCommentAllList) || ViewBag.userMethods.Contains(EMethod.BlogCommentList))
+                                {
+                                    <li><i class="menu-icon ti-themify-logo"></i><a href="/Admin/BlogComment">Bloglerime Yapılan yorumları Görüntüle</a></li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                }
+
+                @if (ViewBag.userMethods.Contains(EMethod.PostAllList)
+                || ViewBag.userMethods.Contains(EMethod.PostList)
+                || ViewBag.userMethods.Contains(EMethod.PostAdd)
+                || ViewBag.userMethods.Contains(EMethod.PostCommentAllList)
+                || ViewBag.userMethods.Contains(EMethod.PostCommentList)
+                || ViewBag.userMethods.Contains(EMethod.PostCommentAdd)
+
+                )
+                {
+                    <li class="menu-title">Gönderiler</li>
+
+                    <!-- /.menu-title -->
+                    @if (ViewBag.userMethods.Contains(EMethod.PostAllList) || ViewBag.userMethods.Contains(EMethod.PostList) || ViewBag.userMethods.Contains(EMethod.PostAdd))
+                    {
+                        <li class="menu-item-has-children dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-tasks"></i>Gönderi İşlemleri</a>
+                            <ul class="sub-menu children dropdown-menu">
+                                @if (ViewBag.userMethods.Contains(EMethod.PostAdd))
+                                {
+                                    <li><i class="menu-icon fa fa-fort-awesome"></i><a href="/Admin/Post/Add">Gönderi Paylaş</a></li>
+                                }
+                                @if (ViewBag.userMethods.Contains(EMethod.PostAllList) || ViewBag.userMethods.Contains(EMethod.PostList))
+                                {
+                                    <li><i class="menu-icon ti-themify-logo"></i><a href="/Admin/Post">Gönderilerimi Gör</a></li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                    @if (ViewBag.userMethods.Contains(EMethod.PostCommentAllList) || ViewBag.userMethods.Contains(EMethod.PostCommentList) || ViewBag.userMethods.Contains(EMethod.PostCommentAdd))
+                    {
+                        <li class="menu-item-has-children dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-tasks"></i>Gönderi Yorum İşlemleri</a>
+                            <ul class="sub-menu children dropdown-menu">
+                                @if (ViewBag.userMethods.Contains(EMethod.PostCommentAllList) || ViewBag.userMethods.Contains(EMethod.PostCommentList))
+                                {
+                                    <li><i class="menu-icon ti-themify-logo"></i><a href="/Admin/PostComment">Gönderilerime Yapılan yorumları Görüntüle</a></li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                }
+                <li class="menu-title">Mesajlar</li><!-- /.menu-title -->
+                <li class="">
+                    <a href="/Chat"> <i class="menu-icon ti-email"></i>Mesajları Görüntüle </a>
+                </li>
+
+                @if (ViewBag.userMethods.Contains(EMethod.RoleMethodAllList)
+                || ViewBag.userMethods.Contains(EMethod.RoleMethodList)
+                || ViewBag.userMethods.Contains(EMethod.RoleMethodAdd)
+
+
+                )
+                {
+                    <li class="menu-title">Sistem Ayarları</li>
+
+                    <!-- /.menu-title -->
+                    @if (ViewBag.userMethods.Contains(EMethod.RoleMethodAllList) || ViewBag.userMethods.Contains(EMethod.RoleMethodList) || ViewBag.userMethods.Contains(EMethod.RoleMethodAdd))
+                    {
+                        <li class="menu-item-has-children dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-tasks"></i>Rol Erişim İşlemleri</a>
+                            <ul class="sub-menu children dropdown-menu">
+                                @if (ViewBag.userMethods.Contains(EMethod.RoleMethodAdd))
+                                {
+                                    <li><i class="menu-icon fa fa-fort-awesome"></i><a href="/Admin/Role/Update">Erişimleri Değiştir</a></li>
+                                }
+                                @if (ViewBag.userMethods.Contains(EMethod.RoleMethodAllList) || ViewBag.userMethods.Contains(EMethod.RoleMethodList))
+                                {
+                                    <li><i class="menu-icon ti-themify-logo"></i><a href="/Admin/Role">Erişimleri Gör</a></li>
+                                }
+                            </ul>
+                        </li>
+                    }
+
+                }
+                <li class="menu-title"></li><!-- /.menu-title -->
+                <li class="">
+                    <a href="/Logout"> <i class="menu-icon ti-email"></i>Çıkış Yap </a>
+                </li>
+
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </nav>
+</aside>

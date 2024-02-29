@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewData["Title"] = "Add";
+    Layout = "~/Views/AdminLayout/_AdminLayout.cshtml";
+}
+
+@model PostCommentDto
+
+<form method="post" enctype="multipart/form-data">
+
+    <input type="hidden" asp-for="PostId" value="@Model.PostId"/>
+
+   <div class="form-floating">
+        <textarea class="form-control" asp-for="Content" placeholder="" id="DescriptionTextarea" style="height: 300px; resize:none"></textarea>
+        <label for="DescriptionTextarea">Yorumunuzu giriniz</label>
+    </div>
+
+    <div class="form-floating">
+        <input type="file" class="form-control" asp-for="Media" placeholder="" id="MediaFile" />
+        <label for="MediaFile">Dosya ekleyebilirsiniz</label>
+    </div>
+
+
+
+
+
+    <button class="btn btn-warning" type="submit">Güncelle</button>
+</form>
+

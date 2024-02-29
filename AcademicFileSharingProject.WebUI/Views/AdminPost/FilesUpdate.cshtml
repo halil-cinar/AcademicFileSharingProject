@@ -1,0 +1,19 @@
+﻿
+@{
+    ViewData["Title"] = "FilesUpdate";
+    Layout = "~/Views/AdminLayout/_AdminLayout.cshtml";
+}
+
+@model PostDto
+<form method="post" class="row g-3" enctype="multipart/form-data">
+    <div class="col-auto">
+        <label for="staticEmail2" class="">Gönderiniz için dosyalar ekleyiniz</label>
+    </div>
+    <div class="col-auto">
+        <label for="inputPassword2" class="visually-hidden">Dosyalar</label>
+        <input type="file" multiple asp-for="Files" class="form-control" id="inputPassword2" placeholder="Dosyalar">
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary mb-3">Güncelle</button>
+    </div>
+</form>

@@ -1,0 +1,82 @@
+﻿@using AcademicFileSharingProject.Entities.Enums
+@{
+    ViewData["Title"] = "Update";
+    Layout = "~/Views/AdminLayout/_AdminLayout.cshtml";
+
+}
+@section CSS {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
+    <style>
+        .multiselect-container.dropdown-menu.show {
+            height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+}
+
+@model RoleMethodAllUpdateDto
+
+<div class="card">
+    <div class="card-header">Example Form</div>
+    <div class="card-body card-block">
+        <form  action="#" method="@((ViewBag.SelectedRole!=null)?"post":"get")" class="">
+            @if(ViewBag.SelectedRole == null){
+            <div class="form-group">
+                <label class=" form-control-label">Kullanıcı Rolü Seçiniz</label>
+                <div class="input-group">
+                    <select required asp-for="Role" name="role"  id="roleSelect" class="form-control">
+                        <option value="-1" disabled selected >Lütfen seçiniz</option>
+                        @foreach (var item in Enum.GetValues<ERoles>().ToList())
+                        {
+                            <option value="@((int)item)">@item.ToString()</option>
+                        }
+
+                    </select>
+                </div>
+            </div>
+            }
+            @if (ViewBag.SelectedRole != null)
+            {
+                <input type="hidden" value="@ViewBag.SelectedRole" asp-for="Role"/>
+                <div class=" h4">
+                    <strong >Görevleri Seçiniz</strong>
+                    <select id="multiple-checkboxes" asp-for="Methods" multiple="multiple" class="" style="display:flex; overflow-y:auto; height:300px;">
+                        <option value="0">Please select</option>
+                        @foreach (var item in Enum.GetValues<EMethod>().ToList())
+                        {
+                            <option value="@((int)item)">@item.ToString()</option>
+                        }
+                    </select>
+                </div>
+                <script>
+                    $(document).ready(function () {
+                        $('#multiple-checkboxes').multiselect({
+                            includeSelectAllOption: true,
+                        });
+                    });
+
+
+                    selectedValues = [@string.Join(",",((ViewBag.SelectedMethods as List<EMethod>).Select(x=>$"{(int)x}")))];
+                    selectedValues = selectedValues.map(String);
+                    console.log(selectedValues)
+
+                    var selectElement = document.getElementById("multiple-checkboxes");
+
+                    for (var i = 0; i < selectElement.options.length; i++) {
+                        var option = selectElement.options[i];
+                        // Eğer option'ın value'su selectedValues içinde varsa, selected yap
+                        if (selectedValues.indexOf(option.value) !== -1) {
+                            option.selected = true;
+                        } else {
+                            option.selected = false;
+                        }
+                    }
+
+                </script>
+            }
+            <div class="form-actions form-group"><button type="submit" class="btn btn-success">@(ViewBag.SelectedRole != null ? "Düzenle" : "Gönder")</button></div>
+        </form>
+    </div>
+</div>

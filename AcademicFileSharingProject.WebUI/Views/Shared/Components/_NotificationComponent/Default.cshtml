@@ -1,0 +1,102 @@
+﻿@using AcademicFileSharingProject.Business.Abstract;
+@inject IAccountService _accountService
+@inject INotificationService _notificationService
+@inject IHttpContextAccessor _httpContextAccessor
+@{
+    var sessionKey = _httpContextAccessor.HttpContext.Request.Cookies["SessionKey"];
+    ViewBag.HasSession = sessionKey != null;
+    if (sessionKey != null)
+    {
+        var result = await _accountService.GetSession(sessionKey);
+
+        if (result.ResultStatus == AcademicFileSharingProject.Dtos.Enums.ResultStatus.Success)
+        {
+            ViewBag.User = result.Result?.User;
+            var notificationResult = await _notificationService.GetAll(new AcademicFileSharingProject.Dtos.Filters.LoadMoreFilter<AcademicFileSharingProject.Dtos.Filters.NotificationFilter>
+                    {
+                        ContentCount = int.MaxValue,
+                        PageCount = 0,
+                        Filter = new AcademicFileSharingProject.Dtos.Filters.NotificationFilter
+                        {
+                            UserId = result.Result?.UserId ?? -1
+                        }
+                    });
+            if (notificationResult.ResultStatus == AcademicFileSharingProject.Dtos.Enums.ResultStatus.Success)
+            {
+                ViewBag.Notifications = notificationResult.Result.Values;
+            }
+        }
+    }
+
+}
+@{
+
+}
+<div class="offcanvas offcanvas-end"
+     tabindex="-1"
+     id="notificationOffCanvas"
+     aria-labelledby="notificationOffCanvasLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="notificationOffCanvasLabel">
+            Bildirimler
+        </h5>
+        <button type="button"
+                class="btn-close text-reset"
+                data-bs-dismiss="offcanvas"
+                aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul class="list-group list-group-flush">
+            @for (int i = 0; i < ((ViewBag.Notifications as List<NotificationListDto>)?.Count ?? 0); i++)
+            {
+                var item = (ViewBag.Notifications as List<NotificationListDto>)?[i];
+                <li class="list-group-item">
+                    <div class="card mb-3">
+                        <div class="row g-0">
+                            <div class="col-2 p-1 overflow-hidden rounded-circle"
+                                 style="max-width: 70px; max-height: 70px">
+                                <img src="https://picsum.photos/200/300"
+                                     class="img-fluid rounded-start w-100 h-100"
+                                     alt="..." />
+                            </div>
+                            <div class="col-10">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <h5 class="card-title col-8">@item.Title</h5>
+                                        @* <a href="@(
+                                            item.EntityType == AcademicFileSharingProject.Entities.Enums.EEntityType.Post ?
+                                            (item.Entity as PostDto)?.Id
+                                            : item.EntityType == AcademicFileSharingProject.Entities.Enums.EEntityType.Blog ?
+                                            (item.Entity as BlogDto)?.Id
+                                            : item.EntityType == AcademicFileSharingProject.Entities.Enums.EEntityType.Message ?
+                                            (item.Entity as MessageDto)?.Message
+                                            :""
+
+                                            )" class="col-4 text-nowrap text-end">Görüntüle</a> *@
+                                    </div>
+
+                                    <p class="card-text">
+                                        @(
+                                            item.EntityType == AcademicFileSharingProject.Entities.Enums.EEntityType.Post ?
+                                            (item.Entity as PostDto)?.Content
+                                            : item.EntityType == AcademicFileSharingProject.Entities.Enums.EEntityType.Blog ?
+                                            (item.Entity as BlogDto)?.Content
+                                            : item.EntityType == AcademicFileSharingProject.Entities.Enums.EEntityType.Message ?
+                                            (item.Entity as MessageDto)?.Message
+                                            :""
+
+                                            )
+                                    </p>
+                                    <p class="card-text">
+                                        <small class="text-muted">@item.CreatedTime.ToShortDateString() @item.CreatedTime.ToShortTimeString()</small>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            }
+        </ul>
+
+    </div>
+</div>

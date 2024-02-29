@@ -1,0 +1,125 @@
+﻿@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/AdminLayout/_AdminLayout.cshtml";
+}
+
+
+@model UserListDto
+
+<div>
+
+    <div class="container">
+        <div class="main-body">
+
+
+
+            <div class="row gutters-sm">
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex flex-column align-items-center text-center">
+                                <img src="@((Model.ProfileImageId!=null)?$"/Media/{Model.ProfileImageId}":"/Media/"+(long)EMediaKey.Person)" alt="Admin" class="rounded-circle" width="150">
+                                <div class="mt-3">
+                                    <h4>@Model.Name @Model.Surname</h4>
+                                    <p class="text-secondary mb-1">@Model.Title</p>
+                                    <p class="text-muted font-size-sm">@Model.Description</p>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mt-3">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0">
+                                    <span class="material-symbols-outlined">
+                                        mail
+                                    </span>
+                                    Eposta
+                                </h6>
+                                <span class="text-secondary"><a href="mailto:@Model.Email">@Model.Email</a></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0">
+                                    <span class="material-symbols-outlined">
+                                        mail
+                                    </span>
+                                    2. Eposta
+                                </h6>
+                                <span class="text-secondary"><a href="mailto:@Model.Email2">@Model.Email2</a></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0">
+                                    <span class="material-symbols-outlined">
+                                        call
+                                    </span>
+                                    Telefon
+                                </h6>
+                                <span class="text-secondary"><a href="tel:@Model.PhoneNumber">@Model.PhoneNumber</a></span>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Tam isim</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    @Model.Name @Model.Surname
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Email</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    <a href="mailto:@Model.Email">@Model.Email</a>
+                                    <br />
+                                    <a href="mailto:@Model.Email2">@Model.Email2</a>
+                                </div>
+                            </div>
+                            <hr>
+                           
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Telefon</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    <a href="tel:@Model.PhoneNumber">@Model.PhoneNumber</a>
+                                </div>
+                            </div>
+                            <hr>
+                           @* <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Address</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    Bay Area, San Francisco, CA
+                                </div>
+                            </div>*@
+                            
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <a class="btn btn-warning" href="/Admin/Student/Update/@Model.Id">Güncelle</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+

@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    ViewData["pageName"] = "/blog";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model GenericLoadMoreDto<BlogListDto>
+
+<div class="container">
+
+
+    <nav aria-label="Page navigation example">
+        <h3 class="justify-content-start">Tüm haberler/ Bloglar</h3>
+        <ul class="pagination justify-content-end">
+            <li class="page-item @(Model?.PrevPage==true?"":"disabled")">
+                <a class="page-link" href="?page=@(Model?.PageCount-1)" tabindex="-1" aria-disabled="@(Model?.PrevPage==true?"false":"true")">Önceki</a>
+            </li>
+            @for (int i = 0; i < (Model?.TotalPageCount ?? 0); i++)
+            {
+                <li class="page-item  @(Model?.PageCount==i?"active":"")"><a class="page-link" href="?page=@i">@(i + 1)</a></li>
+
+            }
+
+            <li class="page-item @(Model?.NextPage==true   ?"":"disabled")">
+                <a class="page-link" href="?page=@(Model?.PageCount+1)" aria-disabled="@(Model?.NextPage==true?"false":"true")">Sonraki</a>
+            </li>
+        </ul>
+    </nav>
+
+    <ul class="list-group list-group-flush">
+        @for (int i = 0; i < (Model?.Values?.Count ?? 0); i++)
+        {
+            var item = Model.Values[i];
+            <li class="list-group-item">
+                <div class="card mb-3">
+                    <div class="row g-0  justify-content-center  justify-content-md-between">
+                        <div class="col-md-3  " style="max-width: 300px; max-height: 300px;">
+                            <img src="@((item.MediaId!=null)?"/Media/"+item.MediaId:"/Media/"+(long)EMediaKey.None)" class="img-fluid rounded-start w-100 h-100 " alt="...">
+                        </div>
+                        <div class="col-md-9">
+                            <div class="card-body">
+                                <h5 class="card-title">@item.Title</h5>
+                                <pre class="format-text card-text">@item.Content.Substring(0, Math.Min(300, item.Content.Length)) ...</pre>
+                                <p class="card-text"><small class="text-muted">@item.ReleaseDate.ToShortDateString() @item.ReleaseDate.ToShortTimeString()</small></p>
+                                <a href="/Blog/@item.Id" class="btn btn-secondary">Görüntüle</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+
+        }
+
+
+    </ul>
+
+
+
+</div>
+
+

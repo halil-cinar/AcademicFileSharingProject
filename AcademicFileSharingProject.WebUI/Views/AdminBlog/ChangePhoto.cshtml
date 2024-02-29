@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewData["Title"] = "PhotoUpdate";
+    Layout = "~/Views/AdminLayout/_AdminLayout.cshtml";
+}
+@model BlogDto
+<form method="post" class="row g-3" enctype="multipart/form-data">
+    <div class="col-auto">
+        <label for="staticEmail2" class="">Blog fotoğrafı seçiniz</label>
+    </div>
+    <div class="col-auto">
+        <label for="inputPassword2" class="visually-hidden">Fotoğraf</label>
+        <input type="file" asp-for="Media" class="form-control" id="inputPassword2" placeholder="Fotoğraf">
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary mb-3">Güncelle</button>
+    </div>
+</form>

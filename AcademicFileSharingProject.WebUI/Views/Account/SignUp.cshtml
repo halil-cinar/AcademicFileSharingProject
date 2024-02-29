@@ -1,0 +1,70 @@
+﻿
+@{
+    ViewData["Title"] = "SignUp";
+    ViewData["pageName"] = "/login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<main class="container text-center" style="max-width: 500px">
+    <form>
+        <!--     <img class="mb-4" src="/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
+        -->
+        <h1><strong>Gibtü </strong></h1>
+        <h2>
+            <strong><pre> < Akademik Paylaşım Platformu > </pre></strong>
+        </h2>
+        <h1 class="h3 mb-3 fw-normal">Lütfen Kayıt olun</h1>
+
+        <div class="form-floating">
+            <input type="text"
+                   class="form-control"
+                   id="floatingInput"
+                   placeholder="" />
+            <label for="floatingInput">İsminiz</label>
+        </div>
+
+        <div class="form-floating">
+            <input type="text"
+                   class="form-control"
+                   id="floatingInput"
+                   placeholder="" />
+            <label for="floatingInput">Soyisminiz</label>
+        </div>
+
+        <div class="form-floating">
+            <input type="email"
+                   class="form-control"
+                   id="floatingInput"
+                   placeholder="" />
+            <label for="floatingInput">EPosta Adresiniz</label>
+        </div>
+
+        <div class="form-floating">
+            <input type="tel"
+                   class="form-control"
+                   id="floatingInput"
+                   placeholder="" />
+            <label for="floatingInput">Telefon Numaranız</label>
+        </div>
+
+        <div class="form-floating">
+            <input type="password"
+                   class="form-control"
+                   id="floatingPassword"
+                   placeholder="Password" />
+            <label for="floatingPassword">Şifreniz</label>
+        </div>
+
+        <div class="checkbox mb-3">
+            <label class="">
+                <input type="checkbox" value="remember-me" /> Beni Hatırla
+            </label>
+        </div>
+        <button class="w-100 btn btn-lg btn-primary" type="submit">
+            Kayıt Ol
+        </button>
+        <p>Hesabınız zaten varmı <a href="#">Giriş Yapın</a></p>
+        <p>Akademisyen misiniz <a href="#">eposta adresi</a> üzerinden sistem yöneticisi ile iletişime geçin</p>
+        <p>Şifrenizimi unuttunuz <a href="#">Tıklayın</a></p>
+
+    </form>
+</main>

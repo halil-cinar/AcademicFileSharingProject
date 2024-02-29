@@ -1,0 +1,88 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["pageName"] = "/Academician";
+}
+
+@section CSS{
+    <link href="~\css\academicians.css" rel="stylesheet" />
+}
+
+@model GenericLoadMoreDto<UserListDto>
+
+<div>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Fakülte Ve Bölümlerimiz</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#faculityList" aria-controls="faculityList" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="faculityList">
+                <ul class="navbar-nav">
+
+                    <li class="nav-item dropdown ">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Dropdown link
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown ">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Dropdown link
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown ">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Dropdown link
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<div class="content">
+
+    <div class="row" style="display: flex;justify-content: center; gap: 10px;">
+
+        @if (Model?.Values?.Count > 0)
+        {
+            foreach (var item in Model.Values)
+            {
+                <div class="card col-md-4" style="width: 18rem;">
+                    <img src="@((item.ProfileImageId!=null)?$"/Media/{item.ProfileImageId}":"/Media/"+(long)EMediaKey.Person)" class="card-img-top" style="height:150px" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Name @item.Surname</h5>
+                        <p class="card-text">@item.Description?.Substring(0,Math.Min(100,item.Description.Length)) @(item.Description?.Length>100?"...":"")</p>
+                        <a href="/Academician/@item.Id" class="btn btn-primary">Profili Görüntüle</a>
+                    </div>
+                </div>
+            }
+        }
+
+
+
+
+    </div>
+
+
+
+
+</div>
+

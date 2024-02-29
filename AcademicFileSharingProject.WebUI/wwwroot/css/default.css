@@ -1,0 +1,16 @@
+.main-navbar{
+height: 60px;
+}
+.main-content{
+    min-height: calc( 100vh - 360px);
+}
+
+footer{
+height: 300px;
+background-color: rgba(128, 128, 128, 0.219);
+}
+
+.format-text {
+    white-space: pre-wrap;
+    font-size:20px;
+}

@@ -1,0 +1,61 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/AdminLayout/_AdminLayout.cshtml";
+}
+@model GenericLoadMoreDto<UserListDto>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Ad</th>
+            <th scope="col">Soyad</th>
+            <th scope="col">Email</th>
+            <th scope="col">Aksiyonlar</th>
+
+        </tr>
+    </thead>
+    <tbody>
+
+
+        @if (Model?.Values?.Count > 0)
+        {
+            for (int i = 0; i < Model.Values.Count; i++)
+            {
+                var item = Model.Values[i];
+                <tr>
+                    <th scope="row">@(i+1)</th>
+                    <td>@item.Name</td>
+                    <td>@item.Surname</td>S
+                    <td>@item.Email</td>
+                    <td>
+                        <a href="/Admin/Academician/@item.Id" class="btn btn-primary">Detaylar</a>
+                        <a href="/Admin/Academician/Delete/@item.Id" class="btn btn-danger">Sil</a>
+                        <a href="/Admin/Academician/Update/@item.Id" class="btn btn-warning">Güncelle</a>
+                        <a href="/Admin/Academician/ChangePhoto/@item.Id" class="btn btn-secondary">Fotoğrafı Değiştir</a>
+                        <a href="/Admin/Academician/ResetPassword/@item.Id" class="btn btn-secondary">Şifreyi sıfırla</a>
+                    </td>
+                </tr>
+            }
+
+        }
+    </tbody>
+</table>
+
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-end">
+        <li class="page-item @(Model?.PrevPage==true?"":"disabled")">
+            <a class="page-link" href="?page=@(Model?.PageCount-1)" tabindex="-1" aria-disabled="@(Model?.PrevPage==true?"false":"true")">Önceki</a>
+        </li>
+        @for (int i = 0; i < (Model?.TotalPageCount ?? 0); i++)
+        {
+            <li class="page-item  @(Model?.PageCount==i?"active":"")"><a class="page-link" href="?page=@i">@(i + 1)</a></li>
+
+        }
+
+        <li class="page-item @(Model?.NextPage==true   ?"":"disabled")">
+            <a class="page-link" href="?page=@(Model?.PageCount+1)" aria-disabled="@(Model?.NextPage==true?"false":"true")">Sonraki</a>
+        </li>
+    </ul>
+</nav>
+

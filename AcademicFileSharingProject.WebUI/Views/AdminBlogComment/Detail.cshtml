@@ -1,0 +1,108 @@
+﻿@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/AdminLayout/_AdminLayout.cshtml";
+}
+
+
+@model BlogCommentListDto
+
+<div>
+
+    <div class="container">
+        <div class="main-body">
+
+
+
+            <div class="row gutters-sm">
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex flex-column align-items-center text-center">
+                                <img src="@((Model.Blog.MediaId!=null)?$"/Media/{Model.Blog.MediaId}":"/Media/"+(long)EMediaKey.None)" alt="Admin" class="rounded-circle" width="200">
+                                <div class="mt-3">
+
+                                    <p class="text-secondary mb-1">@Model.Blog.Title</p>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mt-3">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0">
+                                    <span class="material-symbols-outlined">
+                                        mail
+                                    </span>
+                                    Blog Başlığı
+                                </h6>
+                                <span class="text-secondary">@Model.Blog.Title</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0">
+                                    <span class="material-symbols-outlined">
+                                        mail
+                                    </span>
+                                    Blog İçeriği
+                                </h6>
+                                <span class="text-secondary">@Model.Blog.Content.Substring(0,Math.Min(300,Model.Blog.Content.Length))</span>
+                            </li>
+
+                          
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Yorumu yapan Tam isim</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    @Model.SenderUser.Name @Model.SenderUser.Surname
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Yorum İçeriği</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    @Model.Content
+                                </div>
+                            </div>
+                            <hr>
+
+                           
+                            @* <div class="row">
+                            <div class="col-sm-3">
+                            <h6 class="mb-0">Address</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                            Bay Area, San Francisco, CA
+                            </div>
+                            </div>*@
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <a class="btn btn-warning" href="/Admin/BlogComment/Update/@Model.Id">Güncelle</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+

@@ -1,0 +1,48 @@
+﻿
+@{
+    ViewData["Title"] = "Login";
+    ViewData["pageName"] = "/login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model IdentityCheckDto
+
+<main class="container text-center" style="max-width: 600px">
+    <form method="post">
+        <!--     <img class="mb-4" src="/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
+        -->
+        <h1><strong>Gibtü </strong></h1>
+        <h3>
+            <strong><pre> < Akademik paylaşım platformu > </pre></strong>
+        </h3>
+        <h1 class="h3 mb-3 fw-normal">Lütfen Giriş Yapın</h1>
+
+        <div class="form-floating">
+            <input type="email"
+                   class="form-control"
+                   id="floatingInput"
+                   asp-for="Email"
+                   placeholder="name@example.com" />
+            <label for="floatingInput">EPosta Adresiniz</label>
+        </div>
+        <div class="form-floating">
+            <input type="password"
+                   class="form-control"
+                   id="floatingPassword"
+                   asp-for="Password"
+                   placeholder="Password" />
+            <label for="floatingPassword">Şifreniz</label>
+        </div>
+
+        <div class="checkbox mb-3">
+            <label class="">
+                <input type="checkbox" value="remember-me" /> Beni Hatırla
+            </label>
+        </div>
+        <button class="w-100 btn btn-lg btn-primary" type="submit">
+            Giriş Yap
+        </button>
+        <p>Hesabınız yokmu <a href="#">Kayıt olun</a></p>
+    </form>
+</main>
+

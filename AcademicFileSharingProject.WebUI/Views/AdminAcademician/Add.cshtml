@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewData["Title"] = "Add";
+    Layout = "~/Views/AdminLayout/_AdminLayout.cshtml";
+}
+
+@model UserAddDto
+
+<form method="post">
+    <div class="form-floating mb-3">
+        <input type="text" asp-for="Name" class="form-control" id="NameInput" placeholder="">
+        <label for="NameInput">Name</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="text" asp-for="Surname" class="form-control" id="SurnameInput" placeholder="">
+        <label for="SurnameInput">Surname</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="text" asp-for="Title" class="form-control" id="TitleInput" placeholder="">
+        <label for="TitleInput">Görev</label>
+    </div>
+    <div class="form-floating">
+        <textarea class="form-control" asp-for="Description" placeholder="" id="DescriptionTextarea" style="height: 150px; resize:none"></textarea>
+        <label for="DescriptionTextarea">Kendinizi anlatan bir yazı giriniz</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="email" asp-for="Email" class="form-control" id="EmailInput" placeholder="">
+        <label for="EmailInput">Email</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="email" asp-for="Email2" class="form-control" id="Email2Input" placeholder="">
+        <label for="Email2Input">Email2</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="text" asp-for="PhoneNumber" class="form-control" id="PhoneInput" placeholder="">
+        <label for="PhoneInput">Telefon</label>
+    </div>
+    <div class="form-floating">
+        <input type="password" asp-for="Password" class="form-control" id="floatingPassword" placeholder="">
+        <label for="floatingPassword">Şifre</label>
+    </div>
+
+    <button class="btn btn-warning" type="submit">Ekle</button>
+</form>
+
+

@@ -1,0 +1,82 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/AdminLayout/_AdminLayout.cshtml";
+}
+@model GenericLoadMoreDto<PostListDto>
+<div class="col-lg-12">
+    <div class="card">
+        <div class="card-header">
+            <strong class="card-title">Gönderi listesi</strong>
+        </div>
+        <div class="table-stats order-table ov-h">
+            <table class="table ">
+                <thead>
+                    <tr class="h1">
+                        <th class="serial">#</th>
+                        <th class="avatar">Gönderi fotorafı</th>
+                        <th>Paylaşan Kullanıcı ismi</th>
+                        <th>İçerik</th>
+                        <th>Durum</th>
+                        <th>Görevler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model?.Values != null)
+                    {
+                        @for (int i = 0; i < Model.Values.Count; i++)
+                        {
+                            var item = Model.Values[i];
+                            <tr>
+                                <td class="serial">@(i + 1).</td>
+                                <td class="avatar">
+                                    <div class="round-img">
+                                        <a href="@((item.PostImageId!=null)?$"/Media/{item.PostImageId}":"/Media/"+(long)EMediaKey.None)"><img class='' src='@((item.PostImageId!=null)?$"/Media/{item.PostImageId}":"")'></a>
+                                    </div>
+                                </td>
+                                <td>  <span class="name">@item.User?.Name @item.User?.Surname</span> </td>
+                                <td> <span class="product">@item.Content.Substring(0,Math.Min(50,item.Content.Length))</span> </td>
+                                <td>
+                                    <span class="badge  badge-@((item.IsAir)?"complete":"pending")">@((item.IsAir) ? "Yayında" : "Taslak halinde")</span>
+                                </td>
+
+                                <td>
+                                    <a href="/Admin/Post/Update/@item.Id" class="btn btn-warning">Güncelle</a>
+                                    <a href="/Admin/Post/Delete/@item.Id" class="btn btn-danger">Sil</a>
+                                    <a href="/Admin/Post/Detail/@item.Id" class="btn btn-primary">Detaylar</a>
+                                    <a href="/Admin/Post/FilesUpdate/@item.Id" class="btn btn-secondary">Dosyaları Güncelle</a>
+                                    <a href="/Admin/Post/PhotoUpdate/@item.Id" class="btn btn-secondary">Fotorafı Güncelle</a>
+                                    <a href="/Admin/PostComment/Add/@item.Id" class="btn btn-secondary">Yorum Ekle</a>
+                                    <a href="/Admin/PostComment/@item.Id" class="btn btn-secondary">Yorumları Görüntüle</a>
+                                    <a href="/Admin/Post/ChangeIsAir/@item.Id" class="btn btn-secondary">@((item.IsAir) ? "Yayından Kaldır" : "Yayına Al")</a>
+
+                                </td>
+                            </tr>
+                        }
+                    }
+
+
+                </tbody>
+            </table>
+
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end">
+                    <li class="page-item @(Model?.PrevPage==true?"":"disabled")">
+                        <a class="page-link" href="?page=@(Model?.PageCount-1)" tabindex="-1" aria-disabled="@(Model?.PrevPage==true?"false":"true")">Önceki</a>
+                    </li>
+                    @for (int i = 0; i < (Model?.TotalPageCount ?? 0); i++)
+                    {
+                        <li class="page-item  @(Model?.PageCount==i?"active":"")"><a class="page-link" href="?page=@i">@(i + 1)</a></li>
+
+                    }
+
+                    <li class="page-item @(Model?.NextPage==true   ?"":"disabled")">
+                        <a class="page-link" href="?page=@(Model?.PageCount+1)" aria-disabled="@(Model?.NextPage==true?"false":"true")">Sonraki</a>
+                    </li>
+                </ul>
+            </nav>
+
+        </div> <!-- /.table-stats -->
+    </div>
+</div>
+
+

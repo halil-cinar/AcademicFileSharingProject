@@ -1,0 +1,66 @@
+﻿@using AcademicFileSharingProject.Entities.Enums
+@{
+    ViewData["Title"] = "ChangeUserRole";
+    Layout = "~/Views/AdminLayout/_AdminLayout.cshtml";
+}
+
+@section CSS {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
+    <style>
+        .multiselect-container.dropdown-menu.show {
+            height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+}
+
+@model UserRoleAllUpdateDto
+
+<div class="card">
+    <div class="card-header">Example Form</div>
+    <div class="card-body card-block">
+        <form method="post" action="/Admin/User/ChangeUserRole/@ViewBag.UserId" class="">
+
+            <input type="hidden" value="@ViewBag.UserId" asp-for="UserId" />
+            <div class=" h4">
+                <strong>Rolleri Seçiniz</strong>
+                <select id="multiple-checkboxes" asp-for="Roles" multiple="multiple" class="" style="display:flex; overflow-y:auto; max-height:300px;">
+                    <option value="0">Please select</option>
+                    @foreach (var item in Enum.GetValues<ERoles>().ToList())
+                    {
+                        <option value="@((int)item)">@item.ToString()</option>
+                    }
+                </select>
+            </div>
+            <script>
+                $(document).ready(function () {
+                    $('#multiple-checkboxes').multiselect({
+                        includeSelectAllOption: true,
+                    });
+                });
+
+
+                selectedValues = [@string.Join(",", ((ViewBag.SelectedRoles as List<ERoles>)?.Select(x => $"{(int)x}")))];
+                selectedValues = selectedValues.map(String);
+                console.log(selectedValues)
+
+                var selectElement = document.getElementById("multiple-checkboxes");
+
+                for (var i = 0; i < selectElement.options.length; i++) {
+                    var option = selectElement.options[i];
+                    // Eğer option'ın value'su selectedValues içinde varsa, selected yap
+                    if (selectedValues.indexOf(option.value) !== -1) {
+                        option.selected = true;
+                    } else {
+                        option.selected = false;
+                    }
+                }
+
+            </script>
+
+            <div class="form-actions form-group"><button type="submit" class="btn btn-success">Değiştir</button></div>
+        </form>
+    </div>
+</div>

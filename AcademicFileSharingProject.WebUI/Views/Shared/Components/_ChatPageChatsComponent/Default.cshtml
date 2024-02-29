@@ -1,0 +1,209 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@section CSS{
+
+}
+
+<!-- chatlist -->
+<div class="chatlist">
+    <div class="modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="chat-header">
+
+                <style>
+
+
+
+                    .input-box {
+                        position: relative;
+                    }
+
+                        .input-box i {
+                            position: absolute;
+                            right: 13px;
+                            top: 15px;
+                            color: #ced4da;
+                        }
+
+                    .form-control {
+                        height: 50px;
+                        background-color: #eeeeee69;
+                    }
+
+                        .form-control:focus {
+                            background-color: #eeeeee69;
+                            box-shadow: none;
+                            border-color: #eee;
+                        }
+
+
+                    .list {
+                        width: 100%;
+                        padding-top: 20px;
+                        padding-bottom: 10px;
+                        display: flex;
+                        align-items: center;
+                    }
+
+                    .border-bottom {
+                        border-bottom: 2px solid #eee;
+                    }
+
+                    .list i {
+                        font-size: 19px;
+                        color: red;
+                    }
+
+                    .list small {
+                        color: #dedddd;
+                    }
+                </style>
+
+                <div class="card border-0">
+
+                    <div class="input-box">
+                        <input type="text" class="form-control" id="userSearchInput">
+                        <i class="fa fa-search"></i>
+                    </div>
+
+                    <div style="position:absolute;z-index:10;top:50px; background-color:dimgray" id="datalistOptions">
+
+
+                        <div class="list border-bottom text-dark">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <script>
+                    const input = document.getElementById('userSearchInput');
+                    const dataList = document.getElementById('datalistOptions');
+                    const form = document.getElementById('msg-search');
+
+                    input.addEventListener('input', function () {
+                        const inputValue = this.value;
+                        const url = '@Url.Action("SearchUser","Chat")?query=' + inputValue
+
+                        if (inputValue == "") {
+                            dataList.innerHTML = "";
+                        }
+
+                        fetch(url)
+                            .then(response => response.json())
+                            .then(data => {
+                                dataList.innerHTML = '';
+
+                                data.forEach(item => {
+
+                                    console.log(item)
+                                    let a = `<div class="list border-bottom text-dark"> <a href="/chat/addDirectChat/${item.id}" class="d-flex align-items-center text-dark"> <div class="flex-shrink-0"> <img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/user.png" alt="user img"> </div> <div class="flex-grow-1 ms-3"> <h3>${item.name} ${item.surname}</h3> <p>${item.title}</p> </div> </a> </div>`;
+                                    dataList.innerHTML += a;
+                                });
+                            })
+                            .catch(error => console.error('Veri alınamadı', error));
+                    });
+
+
+                </script>
+
+
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="Users-tab" data-bs-toggle="tab" data-bs-target="#Users" type="button" role="tab" aria-controls="Users" aria-selected="true">Kişiler</button>
+                    </li>
+                    @* <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="Closed-tab" data-bs-toggle="tab" data-bs-target="#Closed" type="button" role="tab" aria-controls="Closed" aria-selected="false">Closed</button>
+                    </li> *@
+                </ul>
+            </div>
+
+            <div class="modal-body">
+                <!-- chat-list -->
+                <div class="chat-lists">
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="Users" role="tabpanel" aria-labelledby="Users-tab">
+                            <!-- chat-list -->
+                            <div class="chat-list">
+                                @for (int i = 0; i < (ViewBag.Chats?.Values?.Count ?? 0); i++)
+                                {
+                                    var item = ViewBag.Chats.Values[i] as ChatListDto;
+                                    <a href="/chat/@item.Id" class="d-flex align-items-center">
+                                        <div class="flex-shrink-0">
+                                            <img class="img-fluid rounded-circle" style="width:70px" src="@((item.ChatUsers.FirstOrDefault(x => x.UserId != (ViewBag.loginUserId as long?) )?.User.ProfileImageId!=null)?$"/Media/{item.ChatUsers.FirstOrDefault(x => x.UserId != (ViewBag.loginUserId as long?) )?.User.ProfileImageId}":"")" alt="user img">
+                                            @*<span class="active"></span>*@
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <h3>
+                                                @(
+                                                    item.ChatType == AcademicFileSharingProject.Entities.Enums.EChatType.Private ?
+                                                    "" + item.ChatUsers.FirstOrDefault(x => x.UserId != (ViewBag.loginUserId as long?) )?.User.FullName :
+                                                    "" + item.Title
+                                                    )
+                                                   
+                                            </h3>
+                                            <p>
+                                                @(
+                                                    item.ChatType == AcademicFileSharingProject.Entities.Enums.EChatType.Private ?
+                                                    "" + item.ChatUsers.FirstOrDefault(x => x.UserId != (ViewBag.loginUserId as long?) )?.User.Title :
+                                                    "" + string.Join(",", item.ChatUsers.Select(x => x.User.FullName).ToList())
+                                                    )
+                                            </p>
+                                        </div>
+                                    </a>
+                                }
+
+
+
+
+                            </div>
+                            <!-- chat-list -->
+                        </div>
+                        <div class="tab-pane fade" id="Closed" role="tabpanel" aria-labelledby="Closed-tab">
+                            @*
+
+                            <!-- chat-list -->
+                            <div class="chat-list">
+                                @for (int i = 0; i < (ViewBag.Chats?.Values?.Count ?? 0); i++)
+                                {
+                                    var item = ViewBag.Chats.Values[i] as ChatListDto;
+                                    <a href="#" class="d-flex align-items-center">
+                                        <div class="flex-shrink-0">
+                                            <img class="img-fluid rounded-circle" style="width:70px" src="@((item.ChatUsers.FirstOrDefault(x => x.UserId != (ViewBag.loginUserId as long?) )?.User.ProfileImageId!=null)?$"/Media/{item.ChatUsers.FirstOrDefault(x => x.Id != (ViewBag.loginUserId as long?) ).User.ProfileImageId}":"")" alt="user img">
+                                            <span class="active"></span>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <h3>
+                                                @(
+                                                    item.ChatType == AcademicFileSharingProject.Entities.Enums.EChatType.Private ?
+                                                    "" + item.ChatUsers.FirstOrDefault(x => x.UserId != (ViewBag.loginUserId as long?) )?.User.FullName :
+                                                    "" + item.Title
+                                                    )
+                                            </h3>
+                                            <p>
+                                                @(
+                                                    item.ChatType == AcademicFileSharingProject.Entities.Enums.EChatType.Private ?
+                                                    "" + item.ChatUsers.FirstOrDefault(x => x.UserId != (ViewBag.loginUserId as long?) )?.User.Title :
+                                                    "" + string.Join(",", item.ChatUsers.Select(x => x.User.FullName).ToList())
+                                                    )
+                                            </p>
+                                        </div>
+                                    </a>
+                                }
+
+                            </div>
+                            <!-- chat-list -->
+                            *@
+                        </div>
+                    </div>
+
+                </div>
+                <!-- chat-list -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- chatlist -->
