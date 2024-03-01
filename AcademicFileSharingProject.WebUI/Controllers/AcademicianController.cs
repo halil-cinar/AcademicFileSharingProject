@@ -2,6 +2,7 @@
 using AcademicFileSharingProject.Dtos.ListDtos;
 using AcademicFileSharingProject.Dtos.LoadMoreDtos;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using NToastNotify;
 
 namespace AcademicFileSharingProject.WebUI.Controllers
@@ -11,24 +12,26 @@ namespace AcademicFileSharingProject.WebUI.Controllers
     {
         private readonly IUserRoleService _userRoleService;
         private readonly IUserService _userService;
+        private readonly ISubscribeService _subscribeService;
         private readonly IPostService _postService;
         private readonly IToastNotification _toastNotification;
-
-        public AcademicianController(IToastNotification toastNotification, IUserRoleService userRoleService, IUserService userService, IPostService postService)
+       
+        public AcademicianController(IToastNotification toastNotification, IUserRoleService userRoleService, IUserService userService, IPostService postService, ISubscribeService subscribeService)
         {
             _toastNotification = toastNotification;
             _userRoleService = userRoleService;
             _userService = userService;
             _postService = postService;
+            _subscribeService = subscribeService;
         }
 
         [HttpGet("")]
-        public async Task< IActionResult> Index()
+        public async Task<IActionResult> Index([FromQuery] int? page)
         {
             var result = await _userRoleService.GetAll(new Dtos.Filters.LoadMoreFilter<Dtos.Filters.UserRoleFilter>
             {
-                ContentCount = 10,
-                PageCount = 0,
+                ContentCount = 15,
+                PageCount = page ?? 0,
                 Filter = new Dtos.Filters.UserRoleFilter
                 {
                     Role = Entities.Enums.ERoles.Academician
@@ -55,20 +58,20 @@ namespace AcademicFileSharingProject.WebUI.Controllers
             return View();
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> Profile(long id)
+        public async Task<IActionResult> Profile(long id, [FromQuery] int? page)
         {
 
             var result = await _userService.Get(id);
             var postResult = await _postService.GetAll(new Dtos.Filters.LoadMoreFilter<Dtos.Filters.PostFilter>
             {
                 ContentCount = 10,
-                PageCount = 0,
+                PageCount = page ?? 0,
                 Filter = new Dtos.Filters.PostFilter
                 {
                     UserId = id,
                 }
             });
-            if(postResult.ResultStatus==Dtos.Enums.ResultStatus.Success)
+            if (postResult.ResultStatus == Dtos.Enums.ResultStatus.Success)
             {
                 ViewBag.Posts = postResult.Result;
             }
@@ -84,7 +87,26 @@ namespace AcademicFileSharingProject.WebUI.Controllers
 
             var message = string.Join(Environment.NewLine, result.ErrorMessages.Select(x => x.Message).ToList());
             _toastNotification.AddErrorToastMessage(message);
-            return View();
+            return RedirectToAction("Index");
+        }
+
+
+        public async Task<IActionResult> AddSubscribe(long userId)
+        {
+            var result = await _subscribeService.Add(new Dtos.AddOrUpdateDtos.SubscribeDto
+            {
+                CreatedTime = DateTime.Now,
+                UserID = 1,
+                SubscribeUserID = userId,
+            });
+            if (result.ResultStatus == Dtos.Enums.ResultStatus.Success)
+            {
+                return RedirectToAction("Profile");
+            }
+
+            var message = string.Join(Environment.NewLine, result.ErrorMessages.Select(x => x.Message).ToList());
+            _toastNotification.AddErrorToastMessage(message);
+            return RedirectToAction("Profile");
         }
 
 

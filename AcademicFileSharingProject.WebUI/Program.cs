@@ -2,6 +2,7 @@ using AcademicFileSharingProject.Business;
 using AcademicFileSharingProject.Business.Abstract;
 using AcademicFileSharingProject.Core.DataAccess;
 using AcademicFileSharingProject.Core.DependencyInjection.AutoMapper;
+using AcademicFileSharingProject.Core.WebUI;
 using AcademicFileSharingProject.DataAccess.Repository.EntityFramework;
 using AcademicFileSharingProject.Entities;
 using AcademicFileSharingProject.Entities.Abstract;
@@ -79,6 +80,9 @@ namespace AcademicFileSharingProject.WebUI
             builder.Services.AddScoped<IEntityRepository<SessionEntity>, EfSessionDal>();
             builder.Services.AddScoped<BaseEntityValidator<SessionEntity>, SessionValidator>();
 
+            builder.Services.AddScoped<ISubscribeService, SubscribeManager>();
+            builder.Services.AddScoped<IEntityRepository<SubscribeEntity>, EfSubscribeDal>();
+            builder.Services.AddScoped<BaseEntityValidator<SubscribeEntity>, SubscribeValidator>();
 
             builder.Services.AddScoped<IRoleMethodService, RoleMethodManager>();
             builder.Services.AddScoped<IEntityRepository<RoleMethodEntity>, EfRoleMethodDal>();
@@ -88,8 +92,14 @@ namespace AcademicFileSharingProject.WebUI
             builder.Services.AddScoped<IEntityRepository<NotificationEntity>, EfNotificationDal>();
             builder.Services.AddScoped<BaseEntityValidator<NotificationEntity>, NotificationValidator>();
 
+            builder.Services.AddScoped<ISystemSettingsService, SystemSettingsManager>();
+            builder.Services.AddScoped<IEntityRepository<SystemSettingsEntity>, EfSystemSettingsDal>();
+            builder.Services.AddScoped<BaseEntityValidator<SystemSettingsEntity>, SystemSettingsValidator>();
+
 
             builder.Services.AddScoped<IAccountService,AccountManager>();   
+            builder.Services.AddScoped<INotificationHub,NotificationHub>();   
+
 
             //Toast
             builder.Services.AddRazorPages().AddNToastNotifyNoty(new NotyOptions
@@ -130,6 +140,7 @@ namespace AcademicFileSharingProject.WebUI
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             app.MapHub<MessageHub>("/messageHub");
+            app.MapHub<NotificationHub>("/notificationHub");
 
             app.Run();
         }

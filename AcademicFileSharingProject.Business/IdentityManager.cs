@@ -188,7 +188,7 @@ namespace AcademicFileSharingProject.Business
                         return response;
                     }
 
-                    var notificationResult = await _notificationService.NotifyUser(new NotificationDto
+                    var notificationResult = await _notificationService.NotifyUserOnEmail(new NotificationDto
                     {
                         EntityId = 0,
                         CreatedTime = DateTime.Now,

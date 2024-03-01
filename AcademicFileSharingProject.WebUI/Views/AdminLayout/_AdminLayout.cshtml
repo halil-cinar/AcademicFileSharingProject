@@ -1,6 +1,33 @@
-﻿@{
+﻿@using AcademicFileSharingProject.Business.Abstract
+@{
     Layout = null;
 }
+@inject ISystemSettingsService _systemSettingsService
+@{
+    var logoResult= await _systemSettingsService.GetLogo();
+    if (logoResult.ResultStatus == AcademicFileSharingProject.Dtos.Enums.ResultStatus.Success)
+    {
+        ViewBag.Logo = logoResult.Result.Value;
+    }
+}
+
+@inject IAccountService _accountService
+@inject IHttpContextAccessor _httpContextAccessor
+@{
+    var sessionKey = _httpContextAccessor.HttpContext.Request.Cookies["SessionKey"];
+    ViewBag.HasSession = sessionKey != null;
+    if (sessionKey != null)
+    {
+        var result = await _accountService.GetSession(sessionKey);
+
+        if (result.ResultStatus == AcademicFileSharingProject.Dtos.Enums.ResultStatus.Success)
+        {
+            ViewBag.User = result.Result?.User;
+        }
+    }
+
+}
+
 <!doctype html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
@@ -10,8 +37,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Ela Admin - HTML5 Admin Template</title>
-    <meta name="description" content="Ela Admin - HTML5 Admin Template">
+    <title></title>
+    <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="apple-touch-icon" href="https://i.imgur.com/QRAUqs9.png">
@@ -38,26 +65,26 @@
     <!-- Right Panel -->
     <div id="right-panel" class="right-panel">
         <!-- Header-->
-        <header id="header" class="header">
-            <div class="top-left">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="./"><img src="~/images/logo.png" alt="Logo"></a>
-                    <a class="navbar-brand hidden" href="./"><img src="~/images/logo2.png" alt="Logo"></a>
+        <header id="header" class="header bg-dark">
+            <div class="top-left bg-dark">
+                <div class="navbar-header bg-dark">
+                    <a class="navbar-brand" href="/"><img src="/Media/@ViewBag.Logo"  alt="Logo"></a>
+                    <a class="navbar-brand hidden" href="/"><img src="/Media/@ViewBag.Logo" alt="Logo"></a>
                     <a id="menuToggle" class="menutoggle"><i class="fa fa-bars"></i></a>
                 </div>
             </div>
-            <div class="top-right">
+            <div class="top-right bg-dark">
                 <div class="header-menu">
                     <div class="header-left">
-                        <button class="search-trigger"><i class="fa fa-search"></i></button>
+                        @* <button class="search-trigger"><i class="fa fa-search"></i></button>
                         <div class="form-inline">
                             <form class="search-form">
                                 <input class="form-control mr-sm-2" type="text" placeholder="Search ..." aria-label="Search">
                                 <button class="search-close" type="submit"><i class="fa fa-close"></i></button>
                             </form>
-                        </div>
+                        </div> *@
 
-                        <div class="dropdown for-notification">
+                     @*    <div class="dropdown for-notification">
                             <button class="btn btn-secondary dropdown-toggle" type="button" id="notification" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fa fa-bell"></i>
                                 <span class="count bg-danger">3</span>
@@ -77,14 +104,19 @@
                                     <p>Server #3 overloaded.</p>
                                 </a>
                             </div>
-                        </div>
+                        </div> *@
 
                         <div class="dropdown for-message">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="message" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="btn btn-secondary dropdown-toggle text-white" id="message" href="/chat">
+                                <i class="fa fa-envelope " style="color: #99abb4;"></i>
+@*                                 <span class="count bg-primary"></span>
+ *@                            </a>
+                            @* <button class="btn btn-secondary dropdown-toggle" type="button" id="message" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fa fa-envelope"></i>
                                 <span class="count bg-primary">4</span>
                             </button>
-                            <div class="dropdown-menu" aria-labelledby="message">
+ *@
+                            @* <div class="dropdown-menu" aria-labelledby="message">
                                 <p class="red">You have 4 Mails</p>
                                 <a class="dropdown-item media" href="#">
                                     <span class="photo media-left"><img alt="avatar" src="~/images/avatar/1.jpg"></span>
@@ -118,23 +150,21 @@
                                         <p>Lorem ipsum dolor sit amet, consectetur</p>
                                     </div>
                                 </a>
-                            </div>
+                            </div> *@
                         </div>
                     </div>
 
                     <div class="user-area dropdown float-right">
                         <a href="#" class="dropdown-toggle active" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img class="user-avatar rounded-circle" src="~/images/admin.jpg" alt="User Avatar">
+                            <img class="user-avatar rounded-circle" src="/Media/@(( ViewBag.User as UserListDto).ProfileImageId!=null? ViewBag.User.ProfileImageId:(int)EMediaKey.Person)" alt="User Avatar">
                         </a>
 
                         <div class="user-menu dropdown-menu">
-                            <a class="nav-link" href="#"><i class="fa fa- user"></i>My Profile</a>
+                            <a class="nav-link" href="/admin"><i class="fa fa- user"></i>Profilim</a>
 
-                            <a class="nav-link" href="#"><i class="fa fa- user"></i>Notifications <span class="count">13</span></a>
+                            <a class="nav-link" href="/Admin/Profile"><i class="fa fa -cog"></i>Profil Ayarları</a>
 
-                            <a class="nav-link" href="#"><i class="fa fa -cog"></i>Settings</a>
-
-                            <a class="nav-link" href="#"><i class="fa fa-power -off"></i>Logout</a>
+                            <a class="nav-link" href="/Logout"><i class="fa fa-power -off"></i>Çıkış yap</a>
                         </div>
                     </div>
 

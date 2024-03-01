@@ -129,5 +129,10 @@ namespace AcademicFileSharingProject.Dtos.Enums
         AccountLoginPasswordWrongError,
         AccountLogoutPasswordWrongError,
         AccountForgatPasswordEmailWrongError,
+        SystemSettingsSystemSettingsGetExceptionError,
+        SystemSettingsSystemSettingsGetAllExceptionError,
+        SystemSettingsSystemSettingsUpdateValidationError,
+        SystemSettingsSystemSettingsUpdateExceptionError,
+        SystemSettingsSystemSettingsChangeLogoExceptionError,
     }
 }

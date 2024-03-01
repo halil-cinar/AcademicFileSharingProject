@@ -129,6 +129,8 @@ namespace AcademicFileSharingProject.Business
 				&& (x.IsDeleted == false)
 				) : Repository.GetAll(x => x.IsDeleted == false);
 
+				entities=entities.OrderBy(x=>x.Id*-1).ToList();
+
 				var firstIndex = filter.PageCount * filter.ContentCount;
 				var lastIndex = firstIndex + filter.ContentCount;
 

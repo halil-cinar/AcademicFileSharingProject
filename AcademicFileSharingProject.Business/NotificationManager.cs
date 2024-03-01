@@ -1,6 +1,7 @@
 ﻿using AcademicFileSharingProject.Business.Abstract;
 using AcademicFileSharingProject.Core.DataAccess;
 using AcademicFileSharingProject.Core.ExtensionsMethods;
+using AcademicFileSharingProject.Core.WebUI;
 using AcademicFileSharingProject.Dtos.AddOrUpdateDtos;
 using AcademicFileSharingProject.Dtos.Filters;
 using AcademicFileSharingProject.Dtos.ListDtos;
@@ -21,11 +22,15 @@ namespace AcademicFileSharingProject.Business
 {
 	public class NotificationManager : ServiceBase<NotificationEntity>, INotificationService
 	{
-		public NotificationManager(IEntityRepository<NotificationEntity> repository, IMapper mapper, BaseEntityValidator<NotificationEntity> validator) : base(repository, mapper, validator)
-		{
-		}
+        private readonly INotificationHub _notificationHub;
+		private readonly ISystemSettingsService _systemSettingsService;
+        public NotificationManager(IEntityRepository<NotificationEntity> repository, IMapper mapper, BaseEntityValidator<NotificationEntity> validator, INotificationHub notificationHub, ISystemSettingsService systemSettingsService) : base(repository, mapper, validator)
+        {
+            this._notificationHub = notificationHub;
+            _systemSettingsService = systemSettingsService;
+        }
 
-		public async Task<BussinessLayerResult<NotificationListDto>> Add(NotificationDto notification)
+        public async Task<BussinessLayerResult<NotificationListDto>> Add(NotificationDto notification)
 		{
 			var response = new BussinessLayerResult<NotificationListDto>();
 			try
@@ -91,7 +96,7 @@ namespace AcademicFileSharingProject.Business
 		}
 
 
-		public async Task<BussinessLayerResult<NotificationListDto>> NotifyUser(NotificationDto notification,string message)
+		public async Task<BussinessLayerResult<NotificationListDto>> NotifyUserOnEmail(NotificationDto notification,string message)
 		{
 			var response = new BussinessLayerResult<NotificationListDto>();
 			using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
@@ -113,10 +118,12 @@ namespace AcademicFileSharingProject.Business
 					message = message.Replace("%user_name%", addResult.Result.User.Name);
 					message = message.Replace("%user_surname%", addResult.Result.User.Surname);
 
-					new MailSender(new SmtpValues
+					var smtpResult =await _systemSettingsService.GetSmtp();
+					if(smtpResult.ResultStatus==Dtos.Enums.ResultStatus.Success)
 					{
-						//Todo: Smtp eklenecek
-					}).SendEmail(notification.Title, message,true, addResult.Result.User.Email, addResult.Result.User.Email2);
+					new MailSender(smtpResult.Result).SendEmail(notification.Title, message,true, addResult.Result.User.Email, addResult.Result.User.Email2);
+
+					}
 
 					response.Result = addResult.Result;
 
@@ -131,9 +138,46 @@ namespace AcademicFileSharingProject.Business
 			return response;
 		}
 
+        public async Task<BussinessLayerResult<NotificationListDto>> NotifyUser(NotificationDto notification, string message)
+        {
+            var response = new BussinessLayerResult<NotificationListDto>();
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                try
+                {
+                    var addResult = await Add(notification);
+                    if (addResult.ResultStatus == Dtos.Enums.ResultStatus.Error)
+                    {
+                        scope.Dispose();
+                        response.ErrorMessages.AddRange(addResult.ErrorMessages);
+                        return response;
+                    }
 
 
-		public async Task<BussinessLayerResult<GenericLoadMoreDto<NotificationListDto>>> GetAll(LoadMoreFilter<NotificationFilter> filter)
+
+                    // %user_name%  ifadesi bizim için kullanıcının ismine  
+                    // %user_surname%  ifadesi bizim için kullanıcının soyismine  
+                    message = message.Replace("%user_name%", addResult.Result.User.Name);
+                    message = message.Replace("%user_surname%", addResult.Result.User.Surname);
+
+                   await _notificationHub.SendNotification(addResult.Result.UserId, message);
+
+                    response.Result = addResult.Result;
+
+                    scope.Complete();
+                }
+                catch (Exception ex)
+                {
+                    scope.Dispose();
+                    response.AddError(Dtos.Enums.ErrorMessageCode.NotificationNotificationGetExceptionError, ex.Message);
+                }
+            }
+            return response;
+        }
+
+
+
+        public async Task<BussinessLayerResult<GenericLoadMoreDto<NotificationListDto>>> GetAll(LoadMoreFilter<NotificationFilter> filter)
 		{
 			var response = new BussinessLayerResult<GenericLoadMoreDto<NotificationListDto>>();
 			try

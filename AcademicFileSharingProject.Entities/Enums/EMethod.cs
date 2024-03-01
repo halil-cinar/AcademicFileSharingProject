@@ -238,6 +238,15 @@ namespace AcademicFileSharingProject.Entities.Enums
         StudentDetail,
 
 
+        SystemSettingsAdd = 541,
+        SystemSettingsRemove,
+        SystemSettingsUpdate,
+        SystemSettingsChangePhoto,
+        SystemSettingsAllList,
+        SystemSettingsList,
+        SystemSettingsDetail,
+
+
 
 
 

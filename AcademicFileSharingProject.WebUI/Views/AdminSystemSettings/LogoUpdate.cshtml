@@ -1,0 +1,41 @@
+﻿@model SystemSettingsListDto
+@{
+    ViewData["Title"] = "LogoUpdate";
+    Layout = "~/Views/AdminLayout/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    
+    <div class="col col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Profil Fotorafı Değiştir</strong> 
+            </div>
+            <div class="card-body card-block">
+                <form  method="post" class="form-inline" enctype="multipart/form-data">
+                    <input type="hidden" name="Id" value="@Model.Id" />
+                    <input type="hidden" name="Key" value="@Model.Key" />
+                    <input type="hidden" name="Name" value="@Model.Name" />
+
+
+                    <div class="d-flex align-items-center justify-content-between">
+                    <div class="form-group">
+                        <img width="50" height="50" style="display:@((Model.Value==null||Model.Value=="")?"none":"")"  src="/Media/@Model.Value"/>
+                    </div>
+                   <div class="  form-group">
+                       
+                       <div class="col col-md-3"><label for="file-input" class=" form-control-label">Dosya Seçiniz</label></div>
+                       <div class="col-12 col-md-9"><input type="file" required id="file-input" name="File" class="form-control-file"></div>
+                        </div>
+                    </div>
+                    <div class="form-actions form-group"><button type="submit" class="btn btn-secondary btn-sm">Güncelle</button></div>
+
+                </form>
+            </div>
+    
+        </div>
+    </div>
+
+
+</div>
+

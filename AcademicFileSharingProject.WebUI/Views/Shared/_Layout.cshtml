@@ -1,4 +1,5 @@
 ﻿@using AcademicFileSharingProject.Business.Abstract;
+@using AcademicFileSharingProject.Core.ExtensionsMethods
 @inject IAccountService _accountService
 @inject IHttpContextAccessor _httpContextAccessor
 @{
@@ -15,7 +16,14 @@
     }
 
 }
-
+@inject ISystemSettingsService _systemSettingsService
+@{
+    var logoResult = await _systemSettingsService.GetLogo();
+    if (logoResult.ResultStatus == AcademicFileSharingProject.Dtos.Enums.ResultStatus.Success)
+    {
+        ViewBag.Logo = logoResult.Result.Value;
+    }
+}
 
 
 <!DOCTYPE html>
@@ -37,13 +45,15 @@
     <script src="https://cdn.jsdelivr.net/npm/@@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 
 
-    @await RenderSectionAsync("CSS",required:false)
+    @await RenderSectionAsync("CSS", required: false)
 
 </head>
 <body>
     <nav class="navbar navbar-expand-sm bg-dark" data-bs-theme="dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/">Gibtü</a>
+            <a class="navbar-brand" href="/">
+                <img src="/Media/@ViewBag.Logo" height="30"  style="vertical-align: middle;" />
+            </a>
             <button class="navbar-toggler"
                     type="button"
                     data-bs-toggle="collapse"
@@ -78,10 +88,10 @@
                     {
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle"
-                           href="#"
-                           role="button"
-                           data-bs-toggle="dropdown"
-                           aria-expanded="false">
+                               href="#"
+                               role="button"
+                               data-bs-toggle="dropdown"
+                               aria-expanded="false">
                                 @ViewBag?.User?.Name @ViewBag?.User?.Surname
                             </a>
                             <ul class="dropdown-menu">
@@ -189,7 +199,13 @@
     <script src="~/microsoft/signalr/dist/browser/signalr.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
     @await Component.InvokeAsync("NToastNotify")
-
+    <script src="~/js/site.js"></script>
+    @if ((ViewBag.User as UserListDto) != null)
+    {
+        <script>
+            setGroupId("@ExtensionsMethods.CalculateMD5Hash("GroupId=" + (ViewBag.User as UserListDto).Id)")
+        </script>
+    }
 </body>
 </html>
 

@@ -40,6 +40,7 @@ namespace AcademicFileSharingProject.DataAccess.EntityFramework
         public DbSet<RoleMethodEntity> RoleMethods { get; set; }
         public DbSet<SessionEntity> Sessions { get; set; }
         public DbSet<MessageEntity> Messages { get; set; }
+        public DbSet<SystemSettingsEntity> SystemSettings { get; set; }
 
 
 

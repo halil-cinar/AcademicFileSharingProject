@@ -20,6 +20,7 @@ namespace AcademicFileSharingProject.Business.Abstract
 		public Task<BussinessLayerResult<GenericLoadMoreDto<NotificationListDto>>> GetAll(LoadMoreFilter<NotificationFilter> filter);
 
 
+		public Task<BussinessLayerResult<NotificationListDto>> NotifyUserOnEmail(NotificationDto notification, string message);
 		public Task<BussinessLayerResult<NotificationListDto>> NotifyUser(NotificationDto notification, string message);
 
 	}

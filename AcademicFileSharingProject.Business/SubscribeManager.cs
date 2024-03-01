@@ -8,6 +8,7 @@ using AcademicFileSharingProject.Dtos.LoadMoreDtos;
 using AcademicFileSharingProject.Dtos.Result;
 using AcademicFileSharingProject.Entities;
 using AcademicFileSharingProject.Entities.Abstract;
+using AcademicFileSharingProject.Entities.Enums;
 using AutoMapper;
 using FluentValidation;
 using System;
@@ -20,11 +21,13 @@ namespace AcademicFileSharingProject.Business
 {
 	public class SubscribeManager : ServiceBase<SubscribeEntity>, ISubscribeService
 	{
-		public SubscribeManager(IEntityRepository<SubscribeEntity> repository, IMapper mapper, BaseEntityValidator<SubscribeEntity> validator) : base(repository, mapper, validator)
-		{
-		}
+		private readonly INotificationService _notificationService;
+        public SubscribeManager(IEntityRepository<SubscribeEntity> repository, IMapper mapper, BaseEntityValidator<SubscribeEntity> validator, INotificationService notificationService) : base(repository, mapper, validator)
+        {
+            _notificationService = notificationService;
+        }
 
-		public async Task<BussinessLayerResult<SubscribeListDto>> Add(SubscribeDto subscribe)
+        public async Task<BussinessLayerResult<SubscribeListDto>> Add(SubscribeDto subscribe)
 		{
 			var response = new BussinessLayerResult<SubscribeListDto>();
 			try
@@ -143,7 +146,7 @@ namespace AcademicFileSharingProject.Business
 		/// <param name="message"></param>
 		/// <param name="subject"></param>
 		/// <returns></returns>
-		public async Task<BussinessLayerResult<bool>> NotifySubscribes(long subscribedUserId,string message,string subject)
+		public async Task<BussinessLayerResult<bool>> NotifySubscribes(long subscribedUserId,string message,string subject,EEntityType entityType=EEntityType.None, long entityId=0 )
 		{
 			// %user_name%  ifadesi bizim için kullanıcının ismine  
 			// %user_surname%  ifadesi bizim için kullanıcının soyismine  
@@ -174,10 +177,18 @@ namespace AcademicFileSharingProject.Business
 					subject = subject.Replace("%subscribeduser_name%", item.SubcsribeUser.Name);
 					subject = subject.Replace("%subscribeduser_surname%", item.SubcsribeUser.Surname);
 
-					new MailSender(new SmtpValues
+					//Bildirim olarak gönderilecek
+
+					await _notificationService.NotifyUser(new NotificationDto
 					{
-						//Todo: Smtp değerleri girilecek
-					}).SendEmail(subject, message, false, (item.User == null) ? item.Email : item.User.Email);
+						CreatedTime = DateTime.Now,
+						UserId = item.UserID ?? 0,
+						EntityType=entityType,
+						Title=subject,
+						EntityId=entityId
+						
+
+					}, message);
 				}
 
 				response.Result = true;

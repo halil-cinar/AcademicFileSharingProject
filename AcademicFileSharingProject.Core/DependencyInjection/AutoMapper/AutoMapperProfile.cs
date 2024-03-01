@@ -255,6 +255,18 @@ namespace AcademicFileSharingProject.Core.DependencyInjection.AutoMapper
 
 
 
+            #region SystemSettingsMapping
+
+            CreateMap<SystemSettingsListDto, SystemSettingsEntity>()
+                .ReverseMap();
+
+            CreateMap<SystemSettingsDto, SystemSettingsEntity>()
+                .ReverseMap();
+
+            #endregion
+
+
+
         }
     }
 }

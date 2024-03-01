@@ -101,6 +101,7 @@ namespace AcademicFileSharingProject.WebUI.Controllers
         [HttpGet("ChangePassword")]
         public IActionResult ChangePassword()
         {
+
             return View();
         }
 

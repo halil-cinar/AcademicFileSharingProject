@@ -1,4 +1,5 @@
 ﻿using AcademicFileSharingProject.Business.Abstract;
+using AcademicFileSharingProject.Dtos.ListDtos;
 using AcademicFileSharingProject.Entities.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
@@ -17,6 +18,7 @@ namespace AcademicFileSharingProject.WebUI.Controllers
         private readonly List<EMethod> userMethods;
         private readonly IToastNotification _toastNotification;
         private readonly long? loginUserId=null;
+        private readonly UserListDto loginUser=null;
 
 
         public AdminHomeController(IAccountService accountService, IUserService userService, IHttpContextAccessor contextAccessor, IToastNotification toastNotification)
@@ -41,6 +43,7 @@ namespace AcademicFileSharingProject.WebUI.Controllers
                     else
                     {
                         loginUserId=result.Result.Result.UserId;
+                        loginUser=result.Result.Result.User;
                         var roleResult = _accountService.GetUserRoleMethods(result.Result.Result.UserId);
                         roleResult.Wait();
                         if (roleResult.Result.ResultStatus == Dtos.Enums.ResultStatus.Success)
@@ -72,7 +75,8 @@ namespace AcademicFileSharingProject.WebUI.Controllers
 
         public IActionResult Index()
         {
-            return View();
+
+            return View(loginUser);
         }
     }
 }

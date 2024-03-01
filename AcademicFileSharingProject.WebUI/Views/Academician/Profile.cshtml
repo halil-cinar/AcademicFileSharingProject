@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@section CSS{
+@section CSS {
     <link href="~/css/academicianProfile.css" rel="stylesheet" />
 }
 @model UserListDto
@@ -14,21 +14,21 @@
     <div class="card mb-3 w-100">
         <div class="row g-0  w-100" style="justify-content: center; align-items: flex-start;">
             <div class="col-md-4 p-4" style="max-width: 300px;">
-                <img src="@((Model.ProfileImageId!=null)?$"/Media/{Model.ProfileImageId}":"/Media/"+(long)EMediaKey.Person)" class="img-fluid rounded" width="300px" height="300px" alt="...">
+                <img src="@((Model?.ProfileImageId!=null)?$"/Media/{Model?.ProfileImageId}":"/Media/"+(long)EMediaKey.Person)" class="img-fluid rounded" width="300px" height="300px" alt="...">
             </div>
             <div class="col-md-8 mt-3 ">
                 <div class="card-body text-md-start" style="text-align: center; ">
-                    <h5 class="card-title">@Model.FullName</h5>
-                    <p class="card-text">@Model.Title</p>
+                    <h5 class="card-title">@Model?.FullName</h5>
+                    <p class="card-text">@Model?.Title</p>
                     <div class="btn-group">
-                        <a href="mailto:@Model.Email@(Model.Email2!=null?","+Model.Email2:"")" class="btn btn-primary active" data-bs-toggle="tooltip" data-bs-html="true" title="halilcinar1260@gmail.com" aria-current="page">EPosta Gönder</a>
-                        <a href="/chat/addDirectChat/@Model.Id" class="btn btn-primary">Mesaj Gönder</a>
-@*                         <a data-bs-toggle="offcanvas" href="#offcanvasDirectMessage" role="button" aria-controls="offcanvasDirectMessage" class="btn btn-primary">Mesaj Gönder</a>
- *@                        <button type="button" class="btn btn-primary active" data-bs-toggle="modal" data-bs-target="#subscribeModal">
+                        <a href="mailto:@Model?.Email@(Model?.Email2!=null?","+Model?.Email2:"")" class="btn btn-primary active" data-bs-toggle="tooltip" data-bs-html="true" title="halilcinar1260@gmail.com" aria-current="page">EPosta Gönder</a>
+                        <a href="/chat/addDirectChat/@Model?.Id" class="btn btn-primary">Mesaj Gönder</a>
+                        @*                         <a data-bs-toggle="offcanvas" href="#offcanvasDirectMessage" role="button" aria-controls="offcanvasDirectMessage" class="btn btn-primary">Mesaj Gönder</a>
+                        *@                        <button type="button" class="btn btn-primary active" data-bs-toggle="modal" data-bs-target="#subscribeModal">
                             Abone olun
                         </button>
                     </div>
-                    <pre style="white-space:pre-wrap">   @Model.Description</pre>
+                    <pre style="white-space:pre-wrap">   @Model?.Description</pre>
                     <!-- Button trigger modal -->
                     <!-- Modal -->
                     <div class="modal fade" id="subscribeModal" tabindex="-1" aria-labelledby="subscribeModalLabel" aria-hidden="true">
@@ -68,11 +68,11 @@
                     <div class="col-10">
                         <div class="d-flex align-items-center">
                             <div class="flex-shrink-0">
-                                <img class="img-fluid rounded-circle" style="width:100px" src="@((Model.ProfileImageId!=null)?$"/Media/{Model.ProfileImageId}":"/Media/"+(long)EMediaKey.Person)" alt="user img">
+                                <img class="img-fluid rounded-circle" style="width:100px" src="@((Model?.ProfileImageId!=null)?$"/Media/{Model?.ProfileImageId}":"/Media/"+(long)EMediaKey.Person)" alt="user img">
                             </div>
                             <div class="flex-grow-1 ms-3">
-                                <h3>@Model.Name @Model.Surname</h3>
-                                <p>@Model.Title</p>
+                                <h3>@Model?.Name @Model?.Surname</h3>
+                                <p>@Model?.Title</p>
                             </div>
                         </div>
                     </div>
@@ -190,9 +190,9 @@
                                         </span><input type="file" name="upload" id="upload" class="upload-box" placeholder="Upload File" aria-label="Upload File">
                                     </div>
 
-                                   
 
-                                   
+
+
                                 </div>
                             </div>
 
@@ -202,10 +202,28 @@
             </div>
         </div>
     </div>
+    <nav aria-label="Page navigation example">
 
+
+        <ul class="container pagination justify-content-end">
+            <li class="page-item @(ViewBag.Posts?.PrevPage==true?"":"disabled")">
+                <a class="page-link" href="?page=@(ViewBag.Posts?.PageCount-1)" tabindex="-1" aria-disabled="@(ViewBag.Posts?.PrevPage==true?"false":"true")">Önceki</a>
+            </li>
+            @for (int i = 0; i < (ViewBag.Posts?.TotalPageCount ?? 0); i++)
+            {
+                <li class="page-item  @(ViewBag.Posts?.PageCount==i?"active":"")"><a class="page-link" href="?page=@i">@(i + 1)</a></li>
+
+            }
+
+            <li class="page-item @(ViewBag.Posts?.NextPage==true   ?"":"disabled")">
+                <a class="page-link" href="?page=@(ViewBag.Posts?.PageCount+1)" aria-disabled="@(ViewBag.Posts?.NextPage==true?"false":"true")">Sonraki</a>
+            </li>
+        </ul>
+    </nav>
     <div class="card container">
         <div class="card-header">
-           @Model.FullName ın Gönderileri
+                @Model?.FullName ın Gönderileri
+           
         </div>
         <div class="card-body">
 
@@ -229,8 +247,8 @@
 
 
                                                 <div class="btn-group row w-100" role="group" style="max-width:400px" aria-label="Gönderi işlemleri">
-                                                    <button type="button" class="col-sm-4  btn btn-primary">Gönderiyi EPostama Gönder</button>
-                                                    @if (item.PostMedias?.Count > 0)
+                                                    @*                                                     <button type="button" class="col-sm-4  btn btn-primary">Gönderiyi EPostama Gönder</button>
+                                            *@                                                    @if (item.PostMedias?.Count > 0)
                                                     {
                                                         <a href="/Media?ids=@string.Join(",",item.PostMedias.Select(x=>x.MediaId))" class="col-sm-4  btn btn-success">Gönderi Dosyalarını İndir</a>
                                                     }
@@ -256,8 +274,8 @@
                                             <div class="">
 
                                                 <div class="btn-group row w-100" role="group" style="max-width:400px" aria-label="Gönderi işlemleri">
-                                                    <button type="button" class="col-sm-4  btn btn-primary">Gönderiyi EPostama Gönder</button>
-                                                    @if (item.PostMedias?.Count > 0)
+                                                    @*                                                     <button type="button" class="col-sm-4  btn btn-primary">Gönderiyi EPostama Gönder</button>
+                                            *@                                                    @if (item.PostMedias?.Count > 0)
                                                     {
                                                         <a href="/Media?ids=@string.Join(",",item.PostMedias.Select(x=>x.MediaId))" class="col-sm-4  btn btn-success">Gönderi Dosyalarını İndir</a>
                                                     }
@@ -277,6 +295,24 @@
 
 
             </ul>
+            <nav aria-label="Page navigation example">
+
+
+                <ul class="pagination justify-content-end">
+                    <li class="page-item @(ViewBag.Posts?.PrevPage==true?"":"disabled")">
+                        <a class="page-link" href="?page=@(ViewBag.Posts?.PageCount-1)" tabindex="-1" aria-disabled="@(ViewBag.Posts?.PrevPage==true?"false":"true")">Önceki</a>
+                    </li>
+                    @for (int i = 0; i < (ViewBag.Posts?.TotalPageCount ?? 0); i++)
+                    {
+                        <li class="page-item  @(ViewBag.Posts?.PageCount==i?"active":"")"><a class="page-link" href="?page=@i">@(i + 1)</a></li>
+
+                    }
+
+                    <li class="page-item @(ViewBag.Posts?.NextPage==true   ?"":"disabled")">
+                        <a class="page-link" href="?page=@(ViewBag.Posts?.PageCount+1)" aria-disabled="@(ViewBag.Posts?.NextPage==true?"false":"true")">Sonraki</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
 </div>

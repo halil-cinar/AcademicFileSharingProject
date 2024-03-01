@@ -2197,6 +2197,7 @@ footer.site-footer {
     font-size: 1.125em; }
   .weather span {
     font-size: 12px; } }
+
 @media (max-width: 1024px) {
   .open aside.left-panel {
     width: 280px;
@@ -2256,8 +2257,8 @@ footer.site-footer {
         aside.left-panel .navbar .navbar-nav li.menu-item-has-children ul {
           padding-left: 0; }
         aside.left-panel .navbar .navbar-nav li.menu-item-has-children .sub-menu {
-          display: block;
-          left: inherit;
+/*          display: block;
+*/          left: inherit;
           right: -160px;
           top: 0; }
           aside.left-panel .navbar .navbar-nav li.menu-item-has-children .sub-menu li a {

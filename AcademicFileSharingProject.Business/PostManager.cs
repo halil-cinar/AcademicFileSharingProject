@@ -31,7 +31,7 @@ namespace AcademicFileSharingProject.Business
         public async Task<BussinessLayerResult<PostListDto>> Add(PostDto post)
         {
             var response = new BussinessLayerResult<PostListDto>();
-            using (var scope = new TransactionScope())
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
 
 
@@ -41,29 +41,31 @@ namespace AcademicFileSharingProject.Business
                     entity.CreatedTime = DateTime.Now;
                     entity.IsDeleted = false;
                     entity.Id = 0;
-
-                    var mediaresult = await _mediaService.Add(new MediaDto
+                    if (post.PostImage != null)
                     {
-                        File = post.PostImage
-                    });
-                    if (mediaresult.ResultStatus == Dtos.Enums.ResultStatus.Error)
-                    {
-                        scope.Dispose();
-                        response.ErrorMessages.AddRange(mediaresult.ErrorMessages);
-                        return response;
+                        var mediaresult = await _mediaService.Add(new MediaDto
+                        {
+                            File = post.PostImage
+                        });
+                        if (mediaresult.ResultStatus == Dtos.Enums.ResultStatus.Error)
+                        {
+                            scope.Dispose();
+                            response.ErrorMessages.AddRange(mediaresult.ErrorMessages);
+                            return response;
 
+                        }
+                        entity.PostImageId = mediaresult.Result;
                     }
-                    entity.PostImageId = mediaresult.Result;
-
 
 
 
                     var validationResult = Validator.Validate(entity);
                     if (!validationResult.IsValid)
-                    {
+                    {   
+                        scope.Dispose();
                         foreach (var item in validationResult.Errors)
                         {
-                            scope.Dispose();
+                            
                             response.AddError(Dtos.Enums.ErrorMessageCode.PostPostAddValidationError, item.ErrorMessage);
 
                         }
@@ -74,7 +76,7 @@ namespace AcademicFileSharingProject.Business
 
 
                     //Files
-                    foreach (var file in post.Files)
+                    foreach (var file in post.Files??new List<IFormFile>())
                     {
                         var result = await _postMediaService.Add(new PostMediaDto
                         {
