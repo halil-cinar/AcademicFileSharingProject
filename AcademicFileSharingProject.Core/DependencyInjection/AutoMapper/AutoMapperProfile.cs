@@ -265,6 +265,45 @@ namespace AcademicFileSharingProject.Core.DependencyInjection.AutoMapper
 
             #endregion
 
+            #region SubscribeMapping
+
+            CreateMap<SubscribeListDto, SubscribeEntity>()
+                .ReverseMap();
+
+            CreateMap<SubscribeDto, SubscribeEntity>()
+                .ReverseMap();
+
+            #endregion
+            
+            #region NotificationMapping
+
+            CreateMap<NotificationListDto, NotificationEntity>()
+                .ReverseMap();
+
+            CreateMap<NotificationDto, NotificationEntity>()
+                .ReverseMap();
+
+            #endregion
+
+            #region SoftwareMapping
+
+            CreateMap<SoftwareListDto, SoftwareEntity>()
+                .ReverseMap();
+
+            CreateMap<SoftwareDto, SoftwareEntity>()
+                .ReverseMap();
+
+            #endregion
+
+            #region PostMediaDownloadMapping
+
+            CreateMap<PostMediaDownloadListDto, PostMediaDownloadEntity>()
+                .ReverseMap();
+
+            CreateMap<PostMediaDownloadDto, PostMediaDownloadEntity>()
+                .ReverseMap();
+
+            #endregion
 
 
         }

@@ -32,6 +32,14 @@ namespace AcademicFileSharingProject.Core.DataAccess.EntityFramework
             
         }
 
+        public long Count()
+        {
+            using (var context = new TContext())
+            {
+                return context.Set<TEntity>().LongCount();
+            }
+        }
+
         public virtual TEntity Delete(TEntity entity)
         {
             using (var context = new TContext())

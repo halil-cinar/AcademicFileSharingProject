@@ -16,6 +16,7 @@ namespace AcademicFileSharingProject.WebUI.Controllers
 
         private readonly IPostService _postService;
         private readonly IPostMediaService _postMediaService;
+        private readonly IPostMediaDownloadService _postMediaDownloadService;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly List<EMethod> userMethods;
         private readonly IToastNotification _toastNotification;
@@ -23,7 +24,7 @@ namespace AcademicFileSharingProject.WebUI.Controllers
         private readonly long? loginUserId = null;
         private readonly IMapper _mapper;
 
-        public AdminPostController(IPostService postService, IToastNotification toastNotification, IMapper mapper, IPostMediaService postMediaService, IHttpContextAccessor contextAccessor, IAccountService accountService)
+        public AdminPostController(IPostService postService, IToastNotification toastNotification, IMapper mapper, IPostMediaService postMediaService, IHttpContextAccessor contextAccessor, IAccountService accountService, IPostMediaDownloadService postMediaDownloadService)
         {
             _postService = postService;
             _toastNotification = toastNotification;
@@ -75,6 +76,7 @@ namespace AcademicFileSharingProject.WebUI.Controllers
 
                 _contextAccessor.HttpContext.Response.Redirect("/");
             }
+            _postMediaDownloadService = postMediaDownloadService;
         }
 
 
@@ -87,8 +89,8 @@ namespace AcademicFileSharingProject.WebUI.Controllers
             }
             var response = await _postService.GetAll(new Dtos.Filters.LoadMoreFilter<Dtos.Filters.PostFilter>
             {
-                ContentCount= 20,
-                PageCount=0,
+                ContentCount = 20,
+                PageCount = 0,
                 Filter = new Dtos.Filters.PostFilter
                 {
                     UserId = (!userMethods.Contains(EMethod.PostAllList)) ? loginUserId : null
@@ -127,7 +129,7 @@ namespace AcademicFileSharingProject.WebUI.Controllers
                 _toastNotification.AddAlertToastMessage("Yetkiniz Bulunmamaktadır");
                 return Redirect("/");
             }
-            post.UserId =(long) loginUserId;
+            post.UserId = (long)loginUserId;
             var response = await _postService.Add(post);
             if (response.ResultStatus == Dtos.Enums.ResultStatus.Success)
             {
@@ -135,9 +137,9 @@ namespace AcademicFileSharingProject.WebUI.Controllers
             }
             var message = string.Join(Environment.NewLine, response.ErrorMessages.Select(x => x.Message).ToList());
             _toastNotification.AddErrorToastMessage(message);
-            
+
             return View();
-           
+
         }
 
 
@@ -180,6 +182,8 @@ namespace AcademicFileSharingProject.WebUI.Controllers
             return RedirectToAction("Index");
         }
 
+
+
         [HttpPost("Update/{id}")]
         public async Task<IActionResult> Update(PostDto post)
         {
@@ -188,7 +192,7 @@ namespace AcademicFileSharingProject.WebUI.Controllers
                 _toastNotification.AddAlertToastMessage("Yetkiniz Bulunmamaktadır");
                 return Redirect("/");
             }
-            post.UserId =(long) loginUserId;
+            post.UserId = (long)loginUserId;
             var response = await _postService.Update(post);
             if (response.ResultStatus == Dtos.Enums.ResultStatus.Success)
             {
@@ -224,7 +228,7 @@ namespace AcademicFileSharingProject.WebUI.Controllers
 
                 return RedirectToAction("Index");
             }
-            ViewBag.Files = mediaResult.Result.Values.Select(x=>x.Media).ToList();
+            ViewBag.Files = mediaResult.Result.Values.Select(x => x.Media).ToList();
             var response = await _postService.Get(id);
             if (response.ResultStatus == Dtos.Enums.ResultStatus.Success)
             {
@@ -253,8 +257,8 @@ namespace AcademicFileSharingProject.WebUI.Controllers
                 return View(new PostDto
                 {
                     Id = id,
-                    UserId=response.Result.UserId,
-                    
+                    UserId = response.Result.UserId,
+
                 });
             }
             var message = string.Join(Environment.NewLine, response.ErrorMessages.Select(x => x.Message).ToList());
@@ -331,9 +335,56 @@ namespace AcademicFileSharingProject.WebUI.Controllers
                     _toastNotification.AddAlertToastMessage("Yetkiniz Bulunmamaktadır");
                     return Redirect("/");
                 }
-                response.Result.IsAir=!response.Result.IsAir;
-                 await Update(_mapper.Map<PostDto>(response.Result) );
+                response.Result.IsAir = !response.Result.IsAir;
+                await Update(_mapper.Map<PostDto>(response.Result));
                 return RedirectToAction("Index");
+            }
+            var message = string.Join(Environment.NewLine, response.ErrorMessages.Select(x => x.Message).ToList());
+            _toastNotification.AddErrorToastMessage(message);
+
+            return RedirectToAction("Index");
+        }
+
+
+        [HttpGet("Files/{postId}")]
+        public async Task<IActionResult> PostMedias(long postId, [FromQuery] int? page)
+        {
+            var response = await _postMediaService.GetAll(new Dtos.Filters.LoadMoreFilter<Dtos.Filters.PostMediaFilter>
+            {
+                ContentCount = 15,
+                PageCount = page ?? 0,
+                Filter = new Dtos.Filters.PostMediaFilter
+                {
+                    PostId = postId,
+                }
+            });
+
+            if (response.ResultStatus == Dtos.Enums.ResultStatus.Success)
+            {
+                return View(response.Result);
+            }
+            var message = string.Join(Environment.NewLine, response.ErrorMessages.Select(x => x.Message).ToList());
+            _toastNotification.AddErrorToastMessage(message);
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet("DownloadedUsers/{postMediaId}")]
+        public async Task<IActionResult> DownloadedUsers(long postMediaId, [FromQuery] int? page)
+        {
+            var response = await _postMediaDownloadService.GetAll(new Dtos.Filters.LoadMoreFilter<Dtos.Filters.PostMediaDownloadFilter>
+            {
+                ContentCount = 25,
+                PageCount = page ?? 0,
+                Filter = new Dtos.Filters.PostMediaDownloadFilter
+                {
+                    PostMediaId = postMediaId,
+                }
+            });
+
+            if (response.ResultStatus == Dtos.Enums.ResultStatus.Success)
+            {
+                return View(response.Result);
             }
             var message = string.Join(Environment.NewLine, response.ErrorMessages.Select(x => x.Message).ToList());
             _toastNotification.AddErrorToastMessage(message);
@@ -344,6 +395,5 @@ namespace AcademicFileSharingProject.WebUI.Controllers
 
 
 
-
-        }
+    }
 }

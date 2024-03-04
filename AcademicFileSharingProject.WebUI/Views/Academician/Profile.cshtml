@@ -24,9 +24,12 @@
                         <a href="mailto:@Model?.Email@(Model?.Email2!=null?","+Model?.Email2:"")" class="btn btn-primary active" data-bs-toggle="tooltip" data-bs-html="true" title="halilcinar1260@gmail.com" aria-current="page">EPosta Gönder</a>
                         <a href="/chat/addDirectChat/@Model?.Id" class="btn btn-primary">Mesaj Gönder</a>
                         @*                         <a data-bs-toggle="offcanvas" href="#offcanvasDirectMessage" role="button" aria-controls="offcanvasDirectMessage" class="btn btn-primary">Mesaj Gönder</a>
-                        *@                        <button type="button" class="btn btn-primary active" data-bs-toggle="modal" data-bs-target="#subscribeModal">
+                        *@                       @*  <button type="button" class="btn btn-primary active" data-bs-toggle="modal" data-bs-target="#subscribeModal">
                             Abone olun
-                        </button>
+                        </button> *@
+                        <a type="button" class="btn btn-primary active" href="/Academician/AddSubscribe/@Model?.Id">
+                            Abone olun
+                        </a>
                     </div>
                     <pre style="white-space:pre-wrap">   @Model?.Description</pre>
                     <!-- Button trigger modal -->
@@ -250,7 +253,8 @@
                                                     @*                                                     <button type="button" class="col-sm-4  btn btn-primary">Gönderiyi EPostama Gönder</button>
                                             *@                                                    @if (item.PostMedias?.Count > 0)
                                                     {
-                                                        <a href="/Media?ids=@string.Join(",",item.PostMedias.Select(x=>x.MediaId))" class="col-sm-4  btn btn-success">Gönderi Dosyalarını İndir</a>
+@*                                                         <a href="/Media?ids=@string.Join(",",item.PostMedias.Select(x=>x.MediaId))" class="col-sm-4  btn btn-success">Gönderi Dosyalarını İndir</a>
+ *@                                                        <a href="Download/@Model.Id/@item.Id" class="col-sm-4  btn btn-success">Gönderi Dosyalarını İndir</a>
                                                     }
                                                 </div>
                                             </div>

@@ -61,7 +61,7 @@ namespace AcademicFileSharingProject.WebUI.Controllers
             return View();
         }
 
-        [HttpPost]
+        [HttpPost("SignUp")]
         public async Task<IActionResult> SignUp(UserAddDto user)
         {
             var result = await _accountService.SignUp(user);
@@ -74,6 +74,28 @@ namespace AcademicFileSharingProject.WebUI.Controllers
             _toastNotification.AddErrorToastMessage(message);
             return View(user);
         }
+
+        [HttpGet("ForgetPassword")]
+        public IActionResult ForgetPassword()
+        {
+            return View();
+        }
+
+        [HttpPost("ForgetPassword")]
+        public async Task<IActionResult> ForgetPassword([FromForm]string email)
+        {
+            var result = await _accountService.ForgatPassword(email);
+            if (result.ResultStatus == Dtos.Enums.ResultStatus.Success)
+            {
+                _toastNotification.AddSuccessToastMessage("Şifre sıfırlama işleminiz alınmıştır yeni şifreniz " +
+                    "için sisteme kayıtlı eposta adresinizi kontrol ediniz");
+                return Redirect("/");
+            }
+            var message = string.Join(Environment.NewLine, result.ErrorMessages.Select(x => x.Message).ToList());
+            _toastNotification.AddErrorToastMessage(message);
+            return Redirect("/");
+        }
+
 
     }
 }

@@ -15,6 +15,7 @@ namespace AcademicFileSharingProject.Entities
         public string Content { get; set; }
 
         public long? PostImageId { get; set; }
+        public long? PostVideoId { get; set; }
         public bool IsAir { get; set; }
 
         [ForeignKey(nameof(UserId))]
@@ -22,6 +23,11 @@ namespace AcademicFileSharingProject.Entities
 
         [ForeignKey(nameof(PostImageId))]
         public MediaEntity? PostImage { get; set;}
+
+        [ForeignKey(nameof(PostVideoId))]
+        public MediaEntity? PostVideo { get; set;}
+
+
 
         public virtual ICollection<PostMediaEntity> PostMedias { get; set; }
 

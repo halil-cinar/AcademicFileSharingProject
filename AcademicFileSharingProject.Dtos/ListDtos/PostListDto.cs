@@ -17,12 +17,14 @@ namespace AcademicFileSharingProject.Dtos.ListDtos
 
         public long? PostImageId { get; set; }
         public bool IsAir { get; set; }
+        public long? PostVideoId { get; set; }
 
-        
+
         public UserListDto User { get; set; }
 
         
         public MediaListDto PostImage { get; set;}
+        public MediaListDto PostVideo { get; set;}
 
         public  List<PostMediaListDto> PostMedias { get; set; }
 

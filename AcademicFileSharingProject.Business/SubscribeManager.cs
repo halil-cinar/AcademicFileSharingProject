@@ -32,10 +32,17 @@ namespace AcademicFileSharingProject.Business
 			var response = new BussinessLayerResult<SubscribeListDto>();
 			try
 			{
+				var oldEntities=Repository.GetAll(x=>x.SubscribeUserID == subscribe.SubscribeUserID&&x.UserID==subscribe.UserID);
+				if(oldEntities!=null && oldEntities.Count > 0)
+				{
+					response.Result = Mapper.Map<SubscribeListDto>(oldEntities[0]);
+					return response;
+				}
 				var entity = Mapper.Map<SubscribeEntity>(subscribe);
 				entity.CreatedTime = DateTime.Now;
 				entity.IsDeleted = false;
 				entity.Id = 0;
+
 
 				var validationResult = Validator.Validate(entity);
 				if (!validationResult.IsValid)

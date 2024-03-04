@@ -41,7 +41,7 @@ namespace AcademicFileSharingProject.Core.ExtensionsMethods
 
                 MailMessage mailMessage = new MailMessage
                 {
-                    From = new MailAddress("no-reply@halilcinar.com"),
+                    From = new MailAddress(smtpDisplayAddress),
                     Subject = subject,
                     Body = body,
                     IsBodyHtml = isHtml,

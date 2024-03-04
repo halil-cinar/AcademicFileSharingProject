@@ -248,11 +248,14 @@ namespace AcademicFileSharingProject.Entities.Enums
 
 
 
-
-
-
-
-
-
+        SoftwareAdd = 511,
+        SoftwareRemove,
+        SoftwareUpdate,
+        SoftwareChangePhoto,
+        SoftwareAllList,
+        SoftwareList,
+        SoftwareDetail,
+        SoftwareAllUpdate,
+        SoftwareAllRemove,
     }
 }

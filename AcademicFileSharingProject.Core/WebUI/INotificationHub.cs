@@ -1,4 +1,6 @@
-﻿namespace AcademicFileSharingProject.Core.WebUI
+﻿using Microsoft.AspNetCore.SignalR;
+
+namespace AcademicFileSharingProject.Core.WebUI
 {
     public interface INotificationHub
     {

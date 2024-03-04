@@ -348,6 +348,9 @@ namespace AcademicFileSharingProject.DataAccess.Migrations
                     b.Property<long?>("PostImageId")
                         .HasColumnType("bigint");
 
+                    b.Property<long?>("PostVideoId")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
@@ -355,9 +358,40 @@ namespace AcademicFileSharingProject.DataAccess.Migrations
 
                     b.HasIndex("PostImageId");
 
+                    b.HasIndex("PostVideoId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Post");
+                });
+
+            modelBuilder.Entity("AcademicFileSharingProject.Entities.PostMediaDownloadEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<long>("PostMediaId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostMediaId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PostMediaDownload");
                 });
 
             modelBuilder.Entity("AcademicFileSharingProject.Entities.PostMediaEntity", b =>
@@ -450,6 +484,55 @@ namespace AcademicFileSharingProject.DataAccess.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Session");
+                });
+
+            modelBuilder.Entity("AcademicFileSharingProject.Entities.SoftwareEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("DocumentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("FileId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsAir")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<long?>("LogoId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DocumentId");
+
+                    b.HasIndex("FileId");
+
+                    b.HasIndex("LogoId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Software");
                 });
 
             modelBuilder.Entity("AcademicFileSharingProject.Entities.SubscribeEntity", b =>
@@ -724,6 +807,10 @@ namespace AcademicFileSharingProject.DataAccess.Migrations
                         .WithMany()
                         .HasForeignKey("PostImageId");
 
+                    b.HasOne("AcademicFileSharingProject.Entities.MediaEntity", "PostVideo")
+                        .WithMany()
+                        .HasForeignKey("PostVideoId");
+
                     b.HasOne("AcademicFileSharingProject.Entities.UserEntity", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -731,6 +818,27 @@ namespace AcademicFileSharingProject.DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("PostImage");
+
+                    b.Navigation("PostVideo");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AcademicFileSharingProject.Entities.PostMediaDownloadEntity", b =>
+                {
+                    b.HasOne("AcademicFileSharingProject.Entities.PostMediaEntity", "PostMedia")
+                        .WithMany()
+                        .HasForeignKey("PostMediaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AcademicFileSharingProject.Entities.UserEntity", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PostMedia");
 
                     b.Navigation("User");
                 });
@@ -761,6 +869,37 @@ namespace AcademicFileSharingProject.DataAccess.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AcademicFileSharingProject.Entities.SoftwareEntity", b =>
+                {
+                    b.HasOne("AcademicFileSharingProject.Entities.MediaEntity", "Document")
+                        .WithMany()
+                        .HasForeignKey("DocumentId");
+
+                    b.HasOne("AcademicFileSharingProject.Entities.MediaEntity", "File")
+                        .WithMany()
+                        .HasForeignKey("FileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AcademicFileSharingProject.Entities.MediaEntity", "Logo")
+                        .WithMany()
+                        .HasForeignKey("LogoId");
+
+                    b.HasOne("AcademicFileSharingProject.Entities.UserEntity", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Document");
+
+                    b.Navigation("File");
+
+                    b.Navigation("Logo");
 
                     b.Navigation("User");
                 });

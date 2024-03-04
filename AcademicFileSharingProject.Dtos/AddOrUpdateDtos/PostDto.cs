@@ -15,6 +15,8 @@ namespace AcademicFileSharingProject.Dtos.AddOrUpdateDtos
         public string Content { get; set; }
 
         public IFormFile PostImage { get; set; }
+        public IFormFile PostVideo { get; set; }
+
         public List<IFormFile> Files { get; set; }
         public bool IsAir { get; set; }
 

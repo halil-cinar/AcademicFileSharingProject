@@ -1,0 +1,133 @@
+﻿@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/AdminLayout/_AdminLayout.cshtml";
+}
+
+
+@model SoftwareListDto
+
+<div>
+
+    <div class="container">
+        <div class="main-body">
+
+
+
+            <div class="row gutters-sm">
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex flex-column align-items-center text-center">
+                                <img src="@((Model.LogoId!=null)?$"/Media/{Model.LogoId}":"/Media/"+(long)EMediaKey.None)" alt="Admin" class="rounded" width="200">
+                                <div class="mt-3">
+                                   
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mt-3">
+                        <h4 class="text-center">Yayınlayan kullanıcı ya ait bilgiler</h4>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0">
+                                    <span class="material-symbols-outlined">
+                                        person
+                                    </span>   Tam ismi
+                                </h6>
+                                <span class="text-secondary">@Model.User.Name @Model.User.Surname</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0">
+                                    <span class="material-symbols-outlined">
+                                        work
+                                    </span>
+                                    Telefon
+                                </h6>
+                                <span class="text-secondary">@Model.User.Title</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0">
+                                    <span class="material-symbols-outlined">
+                                        mail
+                                    </span>
+                                    Eposta
+                                </h6>
+                                <span class="text-secondary"><a href="mailto:@Model.User.Email">@Model.User.Email</a></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0">
+                                    <span class="material-symbols-outlined">
+                                        mail
+                                    </span>
+                                    2. Eposta
+                                </h6>
+                                <span class="text-secondary"><a href="mailto:@Model.User.Email2">@Model.User.Email2</a></span>
+                            </li>
+                           
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">İsim</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    @Model.Name
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Açıklama</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    @Model.Description
+
+                                </div>
+                            </div>
+                            <hr>
+                           
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Yayınlanma Durumu</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    <span class="badge @(Model.IsAir?"bg-success":"bg-primary")"> @(Model.IsAir ? "Yayınlandı" : "Taslak")</span>
+                                </div>
+                            </div>
+                            <hr>
+                           @* <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Address</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    Bay Area, San Francisco, CA
+                                </div>
+                            </div>*@
+                            
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <a class="btn btn-warning" href="/Admin/Blog/Update/@Model.Id">Güncelle</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+

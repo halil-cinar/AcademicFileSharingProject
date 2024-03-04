@@ -23,6 +23,8 @@ namespace AcademicFileSharingProject.Core.DataAccess
         public TEntity Get(Expression<Func<TEntity, bool>> filter);
         public TEntity Get(long id);
 
+        public long Count();
+
 
 
 

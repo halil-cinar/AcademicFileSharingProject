@@ -75,8 +75,13 @@
                         <a class="nav-link  @(ViewData["pageName"]=="/blog"?"active":"")" href="/blog">Haber Ve Bloglar</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link  @(ViewData["pageName"]=="/Software"?"active":"")" href="/Software">Yazılımlar</a>
+                    </li>
+
+                    <li class="nav-item">
                         <a class="nav-link  @(ViewData["pageName"]=="/chat"?"active":"")" href="/chat">Mesajlar</a>
                     </li>
+
                     @if (!ViewBag.HasSession)
                     {
                         <li class="nav-item">

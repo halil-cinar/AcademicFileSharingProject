@@ -157,10 +157,10 @@ namespace AcademicFileSharingProject.Business
 
                     // %user_name%  ifadesi bizim için kullanıcının ismine  
                     // %user_surname%  ifadesi bizim için kullanıcının soyismine  
-                    message = message.Replace("%user_name%", addResult.Result.User.Name);
-                    message = message.Replace("%user_surname%", addResult.Result.User.Surname);
+                    message = message.Replace("%user_name%", addResult.Result?.User?.Name);
+                    message = message.Replace("%user_surname%", addResult.Result?.User?.Surname);
 
-                   await _notificationHub.SendNotification(addResult.Result.UserId, message);
+                   await _notificationHub.SendNotification(addResult.Result?.UserId??0, message);
 
                     response.Result = addResult.Result;
 

@@ -18,8 +18,9 @@ namespace AcademicFileSharingProject.Business.Abstract
         public Task<BussinessLayerResult<PostListDto>> Update(PostDto post);
         public Task<BussinessLayerResult<PostListDto>> Get(long id);
         public Task<BussinessLayerResult<GenericLoadMoreDto<PostListDto>>> GetAll(LoadMoreFilter<PostFilter> filter);
-        public  Task<BussinessLayerResult<PostListDto>> ChangeFiles(PostDto post);
-        public  Task<BussinessLayerResult<PostListDto>> ChangePhoto(PostDto post);
+        public Task<BussinessLayerResult<PostListDto>> ChangeFiles(PostDto post);
+        public Task<BussinessLayerResult<PostListDto>> ChangePhoto(PostDto post);
+        public Task<BussinessLayerResult<PostListDto>> ChangeVideo(PostDto post);
 
 
     }

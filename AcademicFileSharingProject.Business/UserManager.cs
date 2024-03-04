@@ -36,6 +36,16 @@ namespace AcademicFileSharingProject.Business
             {
                 try
                 {
+
+                    //email kontrol
+                    var users=Repository.GetAll(x=>(x.Email==user.Email||x.Email==user.Email2||x.Email2==user.Email||x.Email2==user.Email2)&&x.IsDeleted==false);
+                    if (users != null && users.Count > 0)
+                    {
+                        scope.Dispose();
+                        response.AddError(Dtos.Enums.ErrorMessageCode.UserUserAddValidationError, "Lütfen daha önce kullanýlmamýþ bir eposta adresi giriniz");
+                        return response;
+                    }
+
                     var entity = Mapper.Map<UserEntity>(user);
                     entity.CreatedTime = DateTime.Now;
                     entity.IsDeleted = false;

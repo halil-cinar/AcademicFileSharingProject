@@ -96,9 +96,18 @@ namespace AcademicFileSharingProject.WebUI
             builder.Services.AddScoped<IEntityRepository<SystemSettingsEntity>, EfSystemSettingsDal>();
             builder.Services.AddScoped<BaseEntityValidator<SystemSettingsEntity>, SystemSettingsValidator>();
 
+            builder.Services.AddScoped<IPostMediaDownloadService, PostMediaDownloadManager>();
+            builder.Services.AddScoped<IEntityRepository<PostMediaDownloadEntity>, EfPostMediaDownloadDal>();
+            builder.Services.AddScoped<BaseEntityValidator<PostMediaDownloadEntity>, PostMediaDownloadValidator>();
+
+            builder.Services.AddScoped<ISoftwareService, SoftwareManager>();
+            builder.Services.AddScoped<IEntityRepository<SoftwareEntity>, EfSoftwareDal>();
+            builder.Services.AddScoped<BaseEntityValidator<SoftwareEntity>, SoftwareValidator>();
+
+
 
             builder.Services.AddScoped<IAccountService,AccountManager>();   
-            builder.Services.AddScoped<INotificationHub,NotificationHub>();   
+            builder.Services.AddSingleton<INotificationHub,NotificationHub>();   
 
 
             //Toast

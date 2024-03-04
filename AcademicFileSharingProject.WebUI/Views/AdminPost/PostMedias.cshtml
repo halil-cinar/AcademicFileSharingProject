@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewData["Title"] = "PostMedias";
+    Layout = "~/Views/AdminLayout/_AdminLayout.cshtml";
+}
+
+
+@model GenericLoadMoreDto<PostMediaListDto>
+<div class="col-lg-12">
+    <div class="card">
+        <div class="card-header">
+            <strong class="card-title">Gönderi listesi</strong>
+        </div>
+        <div class="table-stats order-table ov-h">
+            <table class="table ">
+                <thead>
+                    <tr class="h1">
+                        <th class="serial">#</th>
+                        <th class="avatar">Dosya Başlığı</th>
+                        <th>Dosya tipi</th>
+                        <th>Görevler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model?.Values != null)
+                    {
+                        @for (int i = 0; i < Model.Values.Count; i++)
+                        {
+                            var item = Model.Values[i];
+                            <tr>
+                                <td class="serial">@(i + 1).</td>
+                                
+                                <td>  <span class="name">@item.Media.FileName</span> </td>
+                                <td> <span class="product">@item.Media.ContentType</span> </td>
+                               
+
+                                <td>
+                                    @* <a href="/Admin/Post/Update/@item.Id" class="btn btn-warning">Güncelle</a>
+                                    <a href="/Admin/Post/Delete/@item.Id" class="btn btn-danger">Sil</a> *@
+                                    <a href="/Admin/Post/DownloadedUsers/@item.Id" class="btn btn-secondary">İndiren kullanıcıları görüntüle</a>
+                                    
+                                </td>
+                            </tr>
+                        }
+                    }
+
+
+                </tbody>
+            </table>
+
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end">
+                    <li class="page-item @(Model?.PrevPage==true?"":"disabled")">
+                        <a class="page-link" href="?page=@(Model?.PageCount-1)" tabindex="-1" aria-disabled="@(Model?.PrevPage==true?"false":"true")">Önceki</a>
+                    </li>
+                    @for (int i = 0; i < (Model?.TotalPageCount ?? 0); i++)
+                    {
+                        <li class="page-item  @(Model?.PageCount==i?"active":"")"><a class="page-link" href="?page=@i">@(i + 1)</a></li>
+
+                    }
+
+                    <li class="page-item @(Model?.NextPage==true   ?"":"disabled")">
+                        <a class="page-link" href="?page=@(Model?.PageCount+1)" aria-disabled="@(Model?.NextPage==true?"false":"true")">Sonraki</a>
+                    </li>
+                </ul>
+            </nav>
+
+        </div> <!-- /.table-stats -->
+    </div>
+</div>
+
+
+

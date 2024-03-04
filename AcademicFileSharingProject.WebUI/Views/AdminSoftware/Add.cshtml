@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewData["Title"] = "Add";
+    Layout = "~/Views/AdminLayout/_AdminLayout.cshtml";
+}
+
+@model BlogDto
+
+<form method="post">
+    
+    <div class="form-floating mb-3">
+        <input type="text" asp-for="Title" class="form-control" id="TitleInput" placeholder="">
+        <label for="TitleInput">Başlık</label>
+    </div>
+    <div class="form-floating">
+        <textarea class="form-control" asp-for="Content" placeholder="" id="ContentTextarea" style="height: 300px; margin-bottom:10px; resize:none"></textarea>
+        <label for="ContentTextarea">İçeriğinizi yazın </label>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="checkbox" asp-for="IsAir" class="form-control" id="IsAirInput" placeholder="">
+        <label for="IsAirInput">Yayınlansın mı?</label>
+    </div>
+    
+
+    <button class="btn btn-warning" type="submit">Ekle</button>
+</form>
+
+

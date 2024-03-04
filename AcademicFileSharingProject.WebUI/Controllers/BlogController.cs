@@ -14,7 +14,7 @@ namespace AcademicFileSharingProject.WebUI.Controllers
         private readonly IBlogService _blogService;
         private readonly IBlogCommentService _blogCommentService;
         private readonly IToastNotification _toastNotification;
-        private readonly long loginUserID=1;
+        private readonly long loginUserID=1;//Todo: login eklenecek
         public BlogController(IToastNotification toastNotification, IBlogService blogService, IBlogCommentService blogCommentService)
         {
             _toastNotification = toastNotification;

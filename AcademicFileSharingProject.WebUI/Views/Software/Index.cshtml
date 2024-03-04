@@ -1,0 +1,48 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    ViewData["pageName"] = "/Software";
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model GenericLoadMoreDto<SoftwareListDto>
+
+<br>
+<div class="d-flex justify-content-between mx-3">
+    <div class="input-group mb-3" style="max-width: 300px;">
+        <input type="text" class="form-control" placeholder="Uygulama ismi ile arama yapın" aria-label="Uygulama ismi ile arama yapın" aria-describedby="button-addon2">
+        <button class="btn btn-outline-secondary" type="button" id="button-addon2">Ara</button>
+    </div>
+    <!--Pagination-->
+</div>
+<div class="container">
+    <div class="row">
+        @for (int i = 0; i < (Model?.Values?.Count ?? 0); i++)
+        {
+            var item = Model.Values[i];
+            <div class="card col-xl-6 col-lg-12 col-12 mx-2" style="max-width: 700px;">
+                <div class="row g-0 ">  
+                    <div class="col-2 d-flex align-items-center">
+                        <img src="/Media/@(item.LogoId??(int)EMediaKey.Person)" class="img-fluid rounded-circle" style="width: 70px; height: 70px;" alt="...">
+                    </div>
+                    <div class="col-8">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.Name</h5>
+                            <p class="card-text">@item.Description</p>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="d-flex justify-content-around">
+                        <a href="/Media/@item.FileId" class="btn btn-success">Dosyayı İndir</a>
+                        <a href="/Media/@item.DocumentId" class="btn btn-success @(item.DocumentId!=null?"":"disabled")">Dökümanı İndir</a>
+
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+
