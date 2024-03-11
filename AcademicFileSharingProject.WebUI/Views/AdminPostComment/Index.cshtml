@@ -25,7 +25,7 @@
                     <th scope="row">@(i + 1)</th>
                     <td class="avatar">
                         <div class="round-img">
-                            <a href="@((item.Post.PostImageId!=null)?$"/Media/{item.Post.PostImageId}":"/Admin/PostComment/Detail/"+item.Id)"><img class='' style="width:150px" src='@((item.Post.PostImageId!=null)?$"/Media/{item.Post.PostImageId}":"/Media/"+(long)EMediaKey.None)'></a>
+                            <a href="@((item.Post.PostMediaId!=null)?$"/Media/{item.Post.PostMediaId}":"/Admin/PostComment/Detail/"+item.Id)"><img class='' style="width:150px" src='@((item.Post.PostMediaId!=null)?$"/Media/{item.Post.PostMediaId}":"/Media/"+(long)EMediaKey.None)'></a>
                         </div>
                     </td>
                     <td>@item.SenderUser.Name @item.SenderUser.Surname</td>

@@ -7,6 +7,7 @@ using NToastNotify;
 
 namespace AcademicFileSharingProject.WebUI.Controllers
 {
+    [Route("/Admin/Software")]
     public class AdminSoftwareController : Controller
     {
         private readonly ISoftwareService _softwareService;
@@ -221,8 +222,8 @@ namespace AcademicFileSharingProject.WebUI.Controllers
         }
 
 
-        [HttpGet("ChangePhoto/{id}")]
-        public async Task<IActionResult> ChangePhoto(long id)
+        [HttpGet("ChangeLogo/{id}")]
+        public async Task<IActionResult> ChangeLogo(long id)
         {
             var result = await _softwareService.Get(id);
 
@@ -243,11 +244,58 @@ namespace AcademicFileSharingProject.WebUI.Controllers
             var message = string.Join(Environment.NewLine, result.ErrorMessages.Select(x => x.Message).ToList());
             _toastNotification.AddErrorToastMessage(message);
             return View();
-
-
         }
 
-        [HttpPost("ChangePhoto/{id}")]
+
+        [HttpGet("ChangeFile/{id}")]
+        public async Task<IActionResult> ChangeFile(long id)
+        {
+            var result = await _softwareService.Get(id);
+
+
+            if (result.ResultStatus == Dtos.Enums.ResultStatus.Success)
+            {
+                if ((result.Result.UserId != loginUserId && !userMethods.Contains(EMethod.SoftwareAllUpdate)) || !userMethods.Contains(EMethod.SoftwareUpdate))
+                {
+                    _toastNotification.AddAlertToastMessage("Yetkiniz Bulunmamaktadır");
+                    return Redirect("/");
+                }
+                return View(new SoftwareDto
+                {
+                    Id = id,
+
+                });
+            }
+            var message = string.Join(Environment.NewLine, result.ErrorMessages.Select(x => x.Message).ToList());
+            _toastNotification.AddErrorToastMessage(message);
+            return View();
+        }
+        [HttpGet("ChangeDocument/{id}")]
+        public async Task<IActionResult> ChangeDocument(long id)
+        {
+            var result = await _softwareService.Get(id);
+
+
+            if (result.ResultStatus == Dtos.Enums.ResultStatus.Success)
+            {
+                if ((result.Result.UserId != loginUserId && !userMethods.Contains(EMethod.SoftwareAllUpdate)) || !userMethods.Contains(EMethod.SoftwareUpdate))
+                {
+                    _toastNotification.AddAlertToastMessage("Yetkiniz Bulunmamaktadır");
+                    return Redirect("/");
+                }
+                return View(new SoftwareDto
+                {
+                    Id = id,
+
+                });
+            }
+            var message = string.Join(Environment.NewLine, result.ErrorMessages.Select(x => x.Message).ToList());
+            _toastNotification.AddErrorToastMessage(message);
+            return View();
+        }
+
+
+        [HttpPost("ChangeLogo/{id}")]
         public async Task<IActionResult> ChangeLogo(SoftwareDto software)
         {
             if ((software.UserId != loginUserId && !userMethods.Contains(EMethod.SoftwareAllUpdate)) || !userMethods.Contains(EMethod.SoftwareUpdate))
@@ -270,7 +318,7 @@ namespace AcademicFileSharingProject.WebUI.Controllers
 
 
 
-        [HttpPost("ChangePhoto/{id}")]
+        [HttpPost("ChangeFile/{id}")]
         public async Task<IActionResult> ChangeFile(SoftwareDto software)
         {
             if ((software.UserId != loginUserId && !userMethods.Contains(EMethod.SoftwareAllUpdate)) || !userMethods.Contains(EMethod.SoftwareUpdate))
@@ -293,7 +341,7 @@ namespace AcademicFileSharingProject.WebUI.Controllers
 
 
 
-        [HttpPost("ChangePhoto/{id}")]
+        [HttpPost("ChangeDocument/{id}")]
         public async Task<IActionResult> ChangeDocument(SoftwareDto software)
         {
             if ((software.UserId != loginUserId && !userMethods.Contains(EMethod.SoftwareAllUpdate)) || !userMethods.Contains(EMethod.SoftwareUpdate))

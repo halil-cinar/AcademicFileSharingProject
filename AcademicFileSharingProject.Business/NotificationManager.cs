@@ -11,6 +11,7 @@ using AcademicFileSharingProject.Entities;
 using AcademicFileSharingProject.Entities.Abstract;
 using AutoMapper;
 using FluentValidation;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Linq;

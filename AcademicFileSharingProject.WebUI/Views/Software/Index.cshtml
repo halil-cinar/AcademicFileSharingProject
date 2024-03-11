@@ -9,23 +9,39 @@
 
 <br>
 <div class="d-flex justify-content-between mx-3">
-    <div class="input-group mb-3" style="max-width: 300px;">
-        <input type="text" class="form-control" placeholder="Uygulama ismi ile arama yapın" aria-label="Uygulama ismi ile arama yapın" aria-describedby="button-addon2">
-        <button class="btn btn-outline-secondary" type="button" id="button-addon2">Ara</button>
-    </div>
-    <!--Pagination-->
+    <form method="get" class="input-group mb-3" style="max-width: 300px;">
+        <input type="hidden" value="@Model?.PageCount" name="page"/>
+        <input type="text" name="search" value="@ViewBag.Search" autocomplete="off" class="form-control" placeholder="Uygulama ismi ile arama yapın" aria-label="Uygulama ismi ile arama yapın" aria-describedby="button-addon2">
+        <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Ara</button>
+    </form>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-end">
+            <li class="page-item @(Model?.PrevPage==true?"":"disabled")">
+                <a class="page-link" href="?page=@(Model?.PageCount-1)@(ViewBag.Search!=null?"&search="+ViewBag.Search:"")" tabindex="-1" aria-disabled="@(Model?.PrevPage==true?"false":"true")">Önceki</a>
+            </li>
+            @for (int i = 0; i < (Model?.TotalPageCount ?? 0); i++)
+            {
+                <li class="page-item  @(Model?.PageCount==i?"active":"")"><a class="page-link" href="?page=@i@(ViewBag.Search!=null?"&search="+ViewBag.Search:"")">@(i + 1)</a></li>
+
+            }
+
+            <li class="page-item @(Model?.NextPage==true   ?"":"disabled")">
+                <a class="page-link" href="?page=@(Model?.PageCount+1)@(ViewBag.Search!=null?"&search="+ViewBag.Search:"")" aria-disabled="@(Model?.NextPage==true?"false":"true")">Sonraki</a>
+            </li>
+        </ul>
+    </nav>
 </div>
 <div class="container">
-    <div class="row">
+    <div class="row justify-content-center">
         @for (int i = 0; i < (Model?.Values?.Count ?? 0); i++)
         {
             var item = Model.Values[i];
-            <div class="card col-xl-6 col-lg-12 col-12 mx-2" style="max-width: 700px;">
+            <div class="card col-xl-5 col-lg-12 col-12 mx-2" style="max-width: 700px;">
                 <div class="row g-0 ">  
-                    <div class="col-2 d-flex align-items-center">
+                    <div class="col-2 d-flex justify-content-center align-items-center">
                         <img src="/Media/@(item.LogoId??(int)EMediaKey.Person)" class="img-fluid rounded-circle" style="width: 70px; height: 70px;" alt="...">
                     </div>
-                    <div class="col-8">
+                    <div class="col-10">
                         <div class="card-body">
                             <h5 class="card-title">@item.Name</h5>
                             <p class="card-text">@item.Description</p>

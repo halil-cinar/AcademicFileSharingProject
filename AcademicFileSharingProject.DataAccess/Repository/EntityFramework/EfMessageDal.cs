@@ -16,7 +16,7 @@ namespace AcademicFileSharingProject.DataAccess.Repository.EntityFramework
     {
         public override IQueryable<MessageEntity> BaseGetAll(DatabaseContext context)
         {
-            return base.BaseGetAll(context).Include(x=>x.SenderUser).Include(x=>x.Chat);
+            return base.BaseGetAll(context).Include(x=>x.SenderUser).Include(x=>x.Chat).OrderBy(x=>x.Id);
         }
     }
 }

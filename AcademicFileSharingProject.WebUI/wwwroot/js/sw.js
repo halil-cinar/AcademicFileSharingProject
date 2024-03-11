@@ -1,26 +1,27 @@
 // SignalR hub'ýna baðlan
 // Grup ID'sini localStorage'den okuma
+//importScripts("../lib/jquery/dist/jquery.min.js")
+importScripts("../microsoft/signalr/dist/browser/signalr.js")
 function getGroupId() {
     return localStorage.getItem("groupId");
 }
 
-var connection = new signalR.HubConnectionBuilder().withUrl("/notificationHub").build();
-// SignalR baðlantýsýný oluþtur
-var connection = $.hubConnection();
-var hubProxy = connection.createHubProxy('BildirimHub');
+var connection = new signalR.HubConnectionBuilder().withUrl("http://localhost:26823/connection").build();
 
 // Gruba katýl
 var groupId = getGroupId(); // Tarayýcýya özel bir grup kimliði
 if (groupId != null && groupId != "") {
+
     
-    hubProxy.on('ReceiveNotification', function (message) {
+    connection.on('ReceiveNotification', function (message) {
         console.log('Bildirim alýndý:', message);
+
         showNotification(message)
     });
 
 
     connection.start().done(function () {
-        hubProxy.invoke('BildirimGonder', groupId, 'Merhaba, bu bir bildirim!');
+        hubProxy.invoke('RegisterService', groupId);
     });
 
 }
@@ -31,5 +32,6 @@ function showNotification(message) {
         badge: 'path/to/badge.png'
     };
 
-    self.registration.showNotification('Baþlýk Burada', options);
+    self.registration.showNotification('Bir bildiriminiz var ', options);
 }
+

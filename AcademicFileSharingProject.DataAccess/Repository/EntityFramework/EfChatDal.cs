@@ -16,7 +16,7 @@ namespace AcademicFileSharingProject.DataAccess.Repository.EntityFramework
     {
         public override IQueryable<ChatEntity> BaseGetAll(DatabaseContext context)
         {
-            var result = base.BaseGetAll(context).Include(x => x.ChatUsers).ThenInclude(x => x.User);
+            var result = base.BaseGetAll(context).Include(x => x.ChatUsers).ThenInclude(x => x.User).OrderByDescending(x=>x.Id);
 
             return result;
 

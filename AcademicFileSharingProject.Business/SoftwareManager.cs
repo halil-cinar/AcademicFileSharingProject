@@ -166,6 +166,7 @@ namespace AcademicFileSharingProject.Business
                 && (filter.Filter.IsAir == null || filter.Filter.IsAir == x.IsAir)
                 && (filter.Filter.HasDocument == null || filter.Filter.HasDocument == (x.DocumentId!=null))
                 && (filter.Filter.HasLogo == null || filter.Filter.HasLogo == (x.LogoId!=null))
+                && (string.IsNullOrEmpty(filter.Filter.Search) || (x.Name+" "+x.Description+" "+x.User.Name+" "+x.User.Surname).ToLower().Contains(filter.Filter.Search.ToLower()))
                 && (x.IsDeleted == false)
                 ) : Repository.GetAll(x => x.IsDeleted == false);
 

@@ -345,10 +345,7 @@ namespace AcademicFileSharingProject.DataAccess.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<long?>("PostImageId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("PostVideoId")
+                    b.Property<long?>("PostMediaId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("UserId")
@@ -356,9 +353,7 @@ namespace AcademicFileSharingProject.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PostImageId");
-
-                    b.HasIndex("PostVideoId");
+                    b.HasIndex("PostMediaId");
 
                     b.HasIndex("UserId");
 
@@ -602,6 +597,37 @@ namespace AcademicFileSharingProject.DataAccess.Migrations
                     b.ToTable("SystemSettings");
                 });
 
+            modelBuilder.Entity("AcademicFileSharingProject.Entities.UserDeviceEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
+                    b.Property<string>("ConnectionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DeviceType")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserDevice");
+                });
+
             modelBuilder.Entity("AcademicFileSharingProject.Entities.UserEntity", b =>
                 {
                     b.Property<long>("Id")
@@ -803,13 +829,9 @@ namespace AcademicFileSharingProject.DataAccess.Migrations
 
             modelBuilder.Entity("AcademicFileSharingProject.Entities.PostEntity", b =>
                 {
-                    b.HasOne("AcademicFileSharingProject.Entities.MediaEntity", "PostImage")
+                    b.HasOne("AcademicFileSharingProject.Entities.MediaEntity", "PostMedia")
                         .WithMany()
-                        .HasForeignKey("PostImageId");
-
-                    b.HasOne("AcademicFileSharingProject.Entities.MediaEntity", "PostVideo")
-                        .WithMany()
-                        .HasForeignKey("PostVideoId");
+                        .HasForeignKey("PostMediaId");
 
                     b.HasOne("AcademicFileSharingProject.Entities.UserEntity", "User")
                         .WithMany()
@@ -817,9 +839,7 @@ namespace AcademicFileSharingProject.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("PostImage");
-
-                    b.Navigation("PostVideo");
+                    b.Navigation("PostMedia");
 
                     b.Navigation("User");
                 });
@@ -919,6 +939,17 @@ namespace AcademicFileSharingProject.DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("SubcsribeUser");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AcademicFileSharingProject.Entities.UserDeviceEntity", b =>
+                {
+                    b.HasOne("AcademicFileSharingProject.Entities.UserEntity", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });

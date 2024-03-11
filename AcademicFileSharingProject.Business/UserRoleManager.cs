@@ -96,9 +96,11 @@ namespace AcademicFileSharingProject.Business
                     Repository.GetAll(x =>
                 (filter.Filter.UserId == null || filter.Filter.UserId == x.UserId)
                 && (filter.Filter.Role == null || filter.Filter.Role == x.Role)
+                && (string.IsNullOrEmpty(filter.Filter.Search) || (x.User.Name+" "+x.User.Surname+" "+x.User.PhoneNumber+" "+x.User.Email+" "+x.User.Email2).ToLower().Contains(filter.Filter.Search.ToLower()))
+
                 && (x.IsDeleted == false)
                 ) : Repository.GetAll(x => x.IsDeleted == false);
-                entities=entities.OrderBy(x=>x.UserId).ToList();
+                entities = entities.OrderBy(x => x.UserId).ToList();
                 //Todo: Orderby bir alt katmana taþýnacak
 
                 var firstIndex = filter.PageCount * filter.ContentCount;
@@ -172,7 +174,7 @@ namespace AcademicFileSharingProject.Business
             {
                 try
                 {
-                    var oldEntities=Repository.GetAll(x=>x.UserId == userrole.UserId);
+                    var oldEntities = Repository.GetAll(x => x.UserId == userrole.UserId);
                     foreach (var item in oldEntities)
                     {
                         Repository.SoftDelete(item);

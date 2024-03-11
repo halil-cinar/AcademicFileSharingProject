@@ -18,20 +18,20 @@
             </div>
             <div class="col-md-8 mt-3 ">
                 <div class="card-body text-md-start" style="text-align: center; ">
-                    <h5 class="card-title">@Model?.FullName</h5>
+                    <h4 class="card-title">@Model?.FullName</h4>
                     <p class="card-text">@Model?.Title</p>
                     <div class="btn-group">
                         <a href="mailto:@Model?.Email@(Model?.Email2!=null?","+Model?.Email2:"")" class="btn btn-primary active" data-bs-toggle="tooltip" data-bs-html="true" title="halilcinar1260@gmail.com" aria-current="page">EPosta Gönder</a>
                         <a href="/chat/addDirectChat/@Model?.Id" class="btn btn-primary">Mesaj Gönder</a>
                         @*                         <a data-bs-toggle="offcanvas" href="#offcanvasDirectMessage" role="button" aria-controls="offcanvasDirectMessage" class="btn btn-primary">Mesaj Gönder</a>
                         *@                       @*  <button type="button" class="btn btn-primary active" data-bs-toggle="modal" data-bs-target="#subscribeModal">
-                            Abone olun
+                        Abone olun
                         </button> *@
                         <a type="button" class="btn btn-primary active" href="/Academician/AddSubscribe/@Model?.Id">
                             Abone olun
                         </a>
                     </div>
-                    <pre style="white-space:pre-wrap">   @Model?.Description</pre>
+                    <pre style="white-space:pre-wrap">@Model?.Description</pre>
                     <!-- Button trigger modal -->
                     <!-- Modal -->
                     <div class="modal fade" id="subscribeModal" tabindex="-1" aria-labelledby="subscribeModalLabel" aria-hidden="true">
@@ -225,8 +225,8 @@
     </nav>
     <div class="card container">
         <div class="card-header">
-                @Model?.FullName ın Gönderileri
-           
+            @Model?.FullName ın Gönderileri
+
         </div>
         <div class="card-body">
 
@@ -234,15 +234,23 @@
                 @for (int i = 0; i < ViewBag.Posts?.Values?.Count ?? 0; i++)
                 {
                     var item = ViewBag.Posts.Values[i] as PostListDto;
-                    if (item.PostImageId != null)
+                    if (item.PostMediaId != null)
                     {
                         <li class="list-group-item">
                             <div class="card  ">
                                 <div class="row g-0  justify-content-center justify-content-md-between">
-                                    <div class="col-md-4  " style="max-width: 300px;">
-                                        <img src="/Media/@item.PostImageId" style="margin: auto;" class="img-fluid rounded-start" width="300px" height="300px" alt="...">
+                                    <div class="col-md-4 col-xl-3  " style="max-width: 300px;">
+                                        @if (item.PostMedia?.ContentType.ToLower().Contains("image") == true)
+                                        {
+                                            <img src="/Media/@item.PostMediaId" style="margin: auto;" class="img-fluid rounded-start" width="300px" height="300px" alt="...">
+                                        }
+                                        @if (item.PostMedia?.ContentType.ToLower().Contains("video") == true)
+                                        {
+                                            <video src="/Media/@item.PostMediaId" style="margin: auto;" class="img-fluid rounded-start" width="300px" height="300px" controls></video>
+
+                                        }
                                     </div>
-                                    <div class="col-md-8 ">
+                                    <div class="col-md-8 col-xl-9">
                                         <div class="card-body">
 
                                             <p class="format-text card-text">@item.Content</p>
@@ -253,8 +261,8 @@
                                                     @*                                                     <button type="button" class="col-sm-4  btn btn-primary">Gönderiyi EPostama Gönder</button>
                                             *@                                                    @if (item.PostMedias?.Count > 0)
                                                     {
-@*                                                         <a href="/Media?ids=@string.Join(",",item.PostMedias.Select(x=>x.MediaId))" class="col-sm-4  btn btn-success">Gönderi Dosyalarını İndir</a>
- *@                                                        <a href="Download/@Model.Id/@item.Id" class="col-sm-4  btn btn-success">Gönderi Dosyalarını İndir</a>
+                                                        @*                                                         <a href="/Media?ids=@string.Join(",",item.PostMedias.Select(x=>x.MediaId))" class="col-sm-4  btn btn-success">Gönderi Dosyalarını İndir</a>
+                                            *@                                                        <a href="Download/@Model.Id/@item.Id" class="col-sm-4  btn btn-success">Gönderi Dosyalarını İndir</a>
                                                     }
                                                 </div>
                                             </div>
@@ -279,9 +287,10 @@
 
                                                 <div class="btn-group row w-100" role="group" style="max-width:400px" aria-label="Gönderi işlemleri">
                                                     @*                                                     <button type="button" class="col-sm-4  btn btn-primary">Gönderiyi EPostama Gönder</button>
-                                            *@                                                    @if (item.PostMedias?.Count > 0)
+                                            *@      @if (item.PostMedias?.Count > 0)
                                                     {
-                                                        <a href="/Media?ids=@string.Join(",",item.PostMedias.Select(x=>x.MediaId))" class="col-sm-4  btn btn-success">Gönderi Dosyalarını İndir</a>
+
+                                                        <a href="Download/@Model.Id/@item.Id" class="col-sm-4  btn btn-success">Gönderi Dosyalarını İndir</a>
                                                     }
                                                 </div>
                                             </div>

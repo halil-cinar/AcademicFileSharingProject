@@ -23,11 +23,12 @@ namespace AcademicFileSharingProject.WebUI.Hubs
             _chatUserService = chatUserService;
             _chatService = chatService;
         }
-
+        //Todo: login eklenecek
         private readonly long loginUserId = 1;
 
         public async Task SendMessage(MessageDto message)
         {
+               
             message.SenderUserId =(long) loginUserId;
             var result = await _messageService.Add(message);
             if (result.ResultStatus == Dtos.Enums.ResultStatus.Success)

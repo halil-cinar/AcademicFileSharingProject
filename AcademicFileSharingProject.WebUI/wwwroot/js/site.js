@@ -39,7 +39,7 @@ function requestNotificationPermission() {
 //Service worker kayıt işlemi   
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
-        navigator.serviceWorker.register('sw.js').then(function (registration) {
+        navigator.serviceWorker.register('/js/sw.js').then(function (registration) {
             console.log('Servis işçisi kaydedildi:', registration);
         }, function (err) {
             console.log('Servis işçisi kaydı başarısız oldu:', err);

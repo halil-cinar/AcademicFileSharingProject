@@ -78,8 +78,7 @@ namespace AcademicFileSharingProject.WebUI.Controllers
             }
         }
 
-        [HttpGet("")]
-        public async Task<IActionResult> Index([FromQuery] int? page)
+        public async Task<IActionResult> Index([FromQuery] int? page, [FromQuery] string? search)
         {
             var result = await _userRoleService.GetAll(new Dtos.Filters.LoadMoreFilter<Dtos.Filters.UserRoleFilter>
             {
@@ -87,11 +86,13 @@ namespace AcademicFileSharingProject.WebUI.Controllers
                 PageCount = page ?? 0,
                 Filter = new Dtos.Filters.UserRoleFilter
                 {
-                    Role = Entities.Enums.ERoles.Academician
+                    Role = Entities.Enums.ERoles.Academician,
+                    Search=search
                 }
             });
             if (result.ResultStatus == Dtos.Enums.ResultStatus.Success)
             {
+                ViewBag.Search = search ;
                 var list = result.Result.Values.Select(x => x.User).ToList();
                 return View(new GenericLoadMoreDto<UserListDto>
                 {
@@ -149,7 +150,7 @@ namespace AcademicFileSharingProject.WebUI.Controllers
             if (loginUserId == null)
             {
                 _toastNotification.AddAlertToastMessage("Lütfen önce giriş yapınız");
-                return RedirectToAction("Profile");
+                return Redirect("/Academician/" + userId);
 
             }
 
@@ -182,7 +183,7 @@ namespace AcademicFileSharingProject.WebUI.Controllers
             if (loginUserId == null)
             {
                 _toastNotification.AddAlertToastMessage("Lütfen önce giriş yapınız");
-                return RedirectToAction("Profile");
+                return Redirect("/Academician/"+userId);
 
             }
 

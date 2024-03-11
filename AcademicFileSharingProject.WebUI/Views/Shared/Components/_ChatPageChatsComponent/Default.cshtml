@@ -133,7 +133,7 @@
                                     var item = ViewBag.Chats.Values[i] as ChatListDto;
                                     <a href="/chat/@item.Id" class="d-flex align-items-center">
                                         <div class="flex-shrink-0">
-                                            <img class="img-fluid rounded-circle" style="width:70px" src="@((item.ChatUsers.FirstOrDefault(x => x.UserId != (ViewBag.loginUserId as long?) )?.User.ProfileImageId!=null)?$"/Media/{item.ChatUsers.FirstOrDefault(x => x.UserId != (ViewBag.loginUserId as long?) )?.User.ProfileImageId}":"")" alt="user img">
+                                            <img class="img-fluid rounded-circle" style="width:60px" src="@((item.ChatUsers.FirstOrDefault(x => x.UserId != (ViewBag.loginUserId as long?) )?.User.ProfileImageId!=null)?$"/Media/{item.ChatUsers.FirstOrDefault(x => x.UserId != (ViewBag.loginUserId as long?) )?.User.ProfileImageId}":"/Media/"+(int)EMediaKey.Person)" alt="user img">
                                             @*<span class="active"></span>*@
                                         </div>
                                         <div class="flex-grow-1 ms-3">

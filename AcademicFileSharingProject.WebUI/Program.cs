@@ -103,11 +103,15 @@ namespace AcademicFileSharingProject.WebUI
             builder.Services.AddScoped<ISoftwareService, SoftwareManager>();
             builder.Services.AddScoped<IEntityRepository<SoftwareEntity>, EfSoftwareDal>();
             builder.Services.AddScoped<BaseEntityValidator<SoftwareEntity>, SoftwareValidator>();
+            
+            builder.Services.AddSingleton<IUserDeviceService, UserDeviceManager>();
+            builder.Services.AddSingleton<IEntityRepository<UserDeviceEntity>, EfUserDeviceDal>();
+            builder.Services.AddSingleton<BaseEntityValidator<UserDeviceEntity>, UserDeviceValidator>();
 
 
 
             builder.Services.AddScoped<IAccountService,AccountManager>();   
-            builder.Services.AddSingleton<INotificationHub,NotificationHub>();   
+            builder.Services.AddSingleton<INotificationHub,SignalRHub>();   
 
 
             //Toast
@@ -115,6 +119,17 @@ namespace AcademicFileSharingProject.WebUI
             {
                 ProgressBar = true,
                 Timeout = 5000
+            });
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.WithOrigins("https://example.com")
+                            .AllowAnyHeader()
+                            .WithMethods("GET", "POST")
+                            .AllowCredentials();
+                    });
             });
 
             builder.Services.AddSignalR();
@@ -144,13 +159,13 @@ namespace AcademicFileSharingProject.WebUI
 
             app.UseNToastNotify();
             app.UseAuthorization();
-
+            app.UseCors();
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             app.MapHub<MessageHub>("/messageHub");
-            app.MapHub<NotificationHub>("/notificationHub");
-
+            app.MapHub<SignalRHub>("/connection");
+            
             app.Run();
         }
     }

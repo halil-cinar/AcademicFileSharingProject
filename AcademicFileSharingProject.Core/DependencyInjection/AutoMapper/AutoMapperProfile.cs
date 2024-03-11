@@ -86,15 +86,15 @@ namespace AcademicFileSharingProject.Core.DependencyInjection.AutoMapper
 
             #region MessageMapping
 
-            CreateMap<MessageEntity,MessageListDto >()
-                .ForMember(x=>x.Chat,opt=>opt.MapFrom(x=>new ChatListDto
+            CreateMap<MessageEntity, MessageListDto>()
+                .ForMember(x => x.Chat, opt => opt.MapFrom(x => new ChatListDto
                 {
-                    ChatType=x.Chat.ChatType,
-                    Title=x.Chat.Title,
-                    CreatedTime=x.Chat.CreatedTime,
-                    Id=x.Chat.Id,
-                    IsDeleted=x.Chat.IsDeleted,
-                } ))
+                    ChatType = x.Chat.ChatType,
+                    Title = x.Chat.Title,
+                    CreatedTime = x.Chat.CreatedTime,
+                    Id = x.Chat.Id,
+                    IsDeleted = x.Chat.IsDeleted,
+                }))
                 .ReverseMap();
 
             CreateMap<MessageDto, MessageEntity>()
@@ -111,15 +111,15 @@ namespace AcademicFileSharingProject.Core.DependencyInjection.AutoMapper
                 .ReverseMap();
 
             CreateMap<PostDto, PostEntity>()
-                .ForMember(x => x.PostImage, x => x.Ignore())
+                .ForMember(x => x.PostMedia, x => x.Ignore())
                 .ReverseMap();
 
             CreateMap<PostDto, PostListDto>()
-                .ForMember(x => x.PostImage, x => x.Ignore())
-                .ForPath(x => x.PostImage, x => x.Ignore());
+                .ForMember(x => x.PostMedia, x => x.Ignore())
+                .ForPath(x => x.PostMedia, x => x.Ignore());
             CreateMap<PostListDto, PostDto>()
-                            .ForMember(x => x.PostImage, x => x.Ignore())
-                            .ForPath(x => x.PostImage, x => x.Ignore());
+                            .ForMember(x => x.PostMedia, x => x.Ignore())
+                            .ForPath(x => x.PostMedia, x => x.Ignore());
 
 
 
@@ -274,7 +274,7 @@ namespace AcademicFileSharingProject.Core.DependencyInjection.AutoMapper
                 .ReverseMap();
 
             #endregion
-            
+
             #region NotificationMapping
 
             CreateMap<NotificationListDto, NotificationEntity>()
@@ -291,7 +291,20 @@ namespace AcademicFileSharingProject.Core.DependencyInjection.AutoMapper
                 .ReverseMap();
 
             CreateMap<SoftwareDto, SoftwareEntity>()
+                .ForMember(x => x.File, opt => opt.Ignore())
+                .ForMember(x => x.Logo, opt => opt.Ignore())
+                .ForMember(x => x.Document, opt => opt.Ignore())
                 .ReverseMap();
+            CreateMap<SoftwareDto, SoftwareListDto>()
+                            .ForMember(x => x.File, opt => opt.Ignore())
+                            .ForMember(x => x.Logo, opt => opt.Ignore())
+                            .ForMember(x => x.Document, opt => opt.Ignore())
+                            ;
+            CreateMap<SoftwareListDto, SoftwareDto>()
+                            .ForMember(x => x.File, opt => opt.Ignore())
+                            .ForMember(x => x.Logo, opt => opt.Ignore())
+                            .ForMember(x => x.Document, opt => opt.Ignore())
+                            ;
 
             #endregion
 
@@ -301,6 +314,16 @@ namespace AcademicFileSharingProject.Core.DependencyInjection.AutoMapper
                 .ReverseMap();
 
             CreateMap<PostMediaDownloadDto, PostMediaDownloadEntity>()
+                .ReverseMap();
+
+            #endregion 
+            
+            #region UserDeviceMapping
+
+            CreateMap<UserDeviceListDto, UserDeviceEntity>()
+                .ReverseMap();
+
+            CreateMap<UserDeviceDto, UserDeviceEntity>()
                 .ReverseMap();
 
             #endregion

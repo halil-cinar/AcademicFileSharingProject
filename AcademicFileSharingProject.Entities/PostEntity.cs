@@ -14,19 +14,16 @@ namespace AcademicFileSharingProject.Entities
         public long UserId { get; set; }
         public string Content { get; set; }
 
-        public long? PostImageId { get; set; }
-        public long? PostVideoId { get; set; }
+        public long? PostMediaId { get; set; }
         public bool IsAir { get; set; }
 
         [ForeignKey(nameof(UserId))]
         public UserEntity User { get; set; }
 
-        [ForeignKey(nameof(PostImageId))]
-        public MediaEntity? PostImage { get; set;}
+        [ForeignKey(nameof(PostMediaId))]
+        public MediaEntity? PostMedia { get; set;}
 
-        [ForeignKey(nameof(PostVideoId))]
-        public MediaEntity? PostVideo { get; set;}
-
+       
 
 
         public virtual ICollection<PostMediaEntity> PostMedias { get; set; }

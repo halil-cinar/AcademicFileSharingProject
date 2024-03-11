@@ -1,6 +1,7 @@
 ﻿using AcademicFileSharingProject.Business.Abstract;
 using AcademicFileSharingProject.Dtos.ListDtos;
 using AcademicFileSharingProject.Dtos.LoadMoreDtos;
+using AcademicFileSharingProject.Entities.Enums;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
 
@@ -11,16 +12,44 @@ namespace AcademicFileSharingProject.WebUI.ViewComponents._LayoutComponents
         private readonly IChatService _chatService;
         private readonly IChatUserService _chatUserService;
         private readonly IUserService _userService;
+        private readonly IAccountService _accountService;
         private readonly IToastNotification _toastNotification;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly long loginUserId = 1;
-        public _ChatPageChatsComponent(IChatService chatService, IChatUserService chatUserService, IUserService userService, IToastNotification toastNotification, IHttpContextAccessor httpContextAccessor)
+        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly long? loginUserId = null;
+        public _ChatPageChatsComponent(IChatService chatService, IChatUserService chatUserService, IUserService userService, IToastNotification toastNotification, IHttpContextAccessor httpContextAccessor, IAccountService accountService)
         {
             _chatService = chatService;
             _chatUserService = chatUserService;
             _userService = userService;
             _toastNotification = toastNotification;
-            _httpContextAccessor = httpContextAccessor;
+            _contextAccessor = httpContextAccessor;
+            _accountService = accountService;
+            var session = _contextAccessor.HttpContext.Request.Cookies["SessionKey"];
+            if (session != null)
+            {
+                var result = _accountService.GetSession(session);
+                result.Wait();
+                if (result.Result.ResultStatus == Dtos.Enums.ResultStatus.Success)
+                {
+                    if (result.Result.Result == null)
+                    {
+                        session = null;
+                    }
+                    else
+                    {
+                        loginUserId = result.Result.Result.UserId;
+                    }
+                }
+                else
+                {
+                    var message = string.Join(Environment.NewLine, result.Result.ErrorMessages.Select(m => m.Message));
+                    _toastNotification.AddErrorToastMessage(message);
+                }
+            }
+            if (session == null)
+            {
+
+            }
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
@@ -44,7 +73,7 @@ namespace AcademicFileSharingProject.WebUI.ViewComponents._LayoutComponents
             var message = string.Join(Environment.NewLine, result.ErrorMessages.Select(x => x.Message).ToList());
             _toastNotification.AddErrorToastMessage(message);
 
-            _httpContextAccessor?.HttpContext?.Response?.Redirect("/");
+            _contextAccessor?.HttpContext?.Response?.Redirect("/");
 
             return View();
         }

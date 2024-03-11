@@ -312,7 +312,7 @@ namespace AcademicFileSharingProject.WebUI.Controllers
                 _toastNotification.AddAlertToastMessage("Yetkiniz Bulunmamaktadır");
                 return Redirect("/");
             }
-            var response = await _postService.ChangePhoto(post);
+            var response = await _postService.ChangeMedia(post);
             if (response.ResultStatus == Dtos.Enums.ResultStatus.Success)
             {
                 return RedirectToAction("Index");

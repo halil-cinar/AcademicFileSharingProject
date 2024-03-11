@@ -30,7 +30,7 @@
                                 <td class="serial">@(i + 1).</td>
                                 <td class="avatar">
                                     <div class="round-img">
-                                        <a href="@((item.PostImageId!=null)?$"/Media/{item.PostImageId}":"/Media/"+(long)EMediaKey.None)"><img class='' src='@((item.PostImageId!=null)?$"/Media/{item.PostImageId}":"")'></a>
+                                        <a href="@((item.PostMediaId!=null)?$"/Media/{item.PostMediaId}":"/Media/"+(long)EMediaKey.None)"><img class='' src='@((item.PostMediaId!=null)?$"/Media/{item.PostMediaId}":"")'></a>
                                     </div>
                                 </td>
                                 <td>  <span class="name">@item.User?.Name @item.User?.Surname</span> </td>

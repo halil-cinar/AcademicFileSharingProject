@@ -15,6 +15,7 @@ namespace AcademicFileSharingProject.Dtos.Filters
         public long? UserId { get; set; }
         public ERoles? Role { get; set; }
 
+        public string? Search { get; set; }
 
     }
 

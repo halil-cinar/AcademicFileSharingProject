@@ -3,15 +3,15 @@
     Layout = "~/Views/AdminLayout/_AdminLayout.cshtml";
 }
 
-@model BlogListDto
+@model SoftwareListDto
 
 <form method="post">
     <div class="form-floating mb-3">
-        <input type="text" asp-for="Title" class="form-control" id="TitleInput" placeholder="">
+        <input type="text" asp-for="Name" class="form-control" id="TitleInput" placeholder="">
         <label for="TitleInput">Başlık</label>
     </div>
     <div class="form-floating">
-        <textarea class="form-control" asp-for="Content" placeholder="" id="ContentTextarea" style="height: 300px; margin-bottom:10px; resize:none"></textarea>
+        <textarea class="form-control" asp-for="Description" placeholder="" id="ContentTextarea" style="height: 300px; margin-bottom:10px; resize:none"></textarea>
         <label for="ContentTextarea">İçeriğinizi yazın </label>
     </div>
     <div class="form-floating mb-3">

@@ -2,9 +2,9 @@
 
 namespace AcademicFileSharingProject.Core.WebUI
 {
-    public interface INotificationHub
+    public abstract class INotificationHub:Hub
     {
-        public Task SendNotification(long userId, string message);
+        public abstract Task SendNotification(long userId, string message);
 
     }
 }

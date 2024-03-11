@@ -154,5 +154,15 @@ namespace AcademicFileSharingProject.Dtos.Enums
         PostMediaDownloadPostMediaDownloadDeleteExceptionError,
         PostMediaDownloadPostMediaDownloadAddExceptionError,
         PostMediaDownloadPostMediaDownloadAddValidationError,
+        UserDeviceUserDeviceGetExceptionError,
+        UserDeviceUserDeviceGetAllExceptionError,
+        UserDeviceUserDeviceUpdateValidationError,
+        UserDeviceUserDeviceUpdateExceptionError,
+        UserDeviceUserDeviceChangeLogoExceptionError,
+        UserDeviceUserDeviceMediaUpdateExceptionError,
+        UserDeviceUserDeviceMediaUpdateValidationError,
+        UserDeviceUserDeviceDeleteExceptionError,
+        UserDeviceUserDeviceAddExceptionError,
+        UserDeviceUserDeviceAddValidationError,
     }
 }

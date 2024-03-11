@@ -5,6 +5,7 @@
 @{
     var sessionKey = _httpContextAccessor.HttpContext.Request.Cookies["SessionKey"];
     ViewBag.HasSession = sessionKey != null;
+    ViewBag.SessionKey = sessionKey;
     if (sessionKey != null)
     {
         var result = await _accountService.GetSession(sessionKey);
@@ -52,7 +53,7 @@
     <nav class="navbar navbar-expand-sm bg-dark" data-bs-theme="dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">
-                <img src="/Media/@ViewBag.Logo" height="30"  style="vertical-align: middle;" />
+                <img src="/Media/@ViewBag.Logo" height="30" style="vertical-align: middle;" />
             </a>
             <button class="navbar-toggler"
                     type="button"
@@ -200,15 +201,104 @@
             </div>
         </div>
     </footer>
+
     <script src="~/microsoft/signalr/dist/browser/signalr.js"></script>
     <script src="~/microsoft/signalr/dist/browser/signalr.min.js"></script>
+    <script>
+        "use strict";
+
+        var connectionId = localStorage.getItem("connectionId")
+
+        var connection = new signalR.HubConnectionBuilder().withUrl("/connection").build();
+
+
+        // if (connectionId != null) {
+        //     var connection = new signalR.HubConnectionBuilder().withUrl("/connection", options => {
+        //         options.Headers.Add("ConnectionId", connectionId);
+        //     }).build();
+        // } else {
+        //     var connection = new signalR.HubConnectionBuilder().withUrl("/connection").build();
+        // }
+        //document.getElementById("sendButton").disabled = true;
+        //window.opener.A = connection;
+
+
+        connection.on("ReceiveMessage", function (message) {
+            if (document.getElementById("messagesList") != null) {
+                ReceiveMessage(message)
+            } else {
+                showNotification(message.message)
+            }
+        });
+
+        connection.on('ReceiveNotification', function (message) {
+            console.log('Bildirim alındı:', message);
+            showNotification(message,"Mesajınız var")
+        });
+
+
+
+
+
+        function getSessionId() {
+            var sessionId = window.sessionStorage.sessionId;
+
+            if (!sessionId) {
+                sessionId = window.sessionStorage.sessionId = Date.now();
+            }
+
+            return sessionId;
+        }
+
+
+        function getConnection() {
+            return connection
+        }
+
+
+        function showNotification(message,title="") {
+            if (Notification.permission !== 'granted') {
+                Notification.requestPermission().then(function (permission) {
+                    if (permission === 'granted') {
+                        showNotification();
+                    } else {
+                        console.log('Kullanıcı bildirim izni vermedi.');
+                    }
+                });
+            }
+            else {
+                var options = {
+                    body: message,
+                    icon: 'path/to/icon.png',
+                    badge: 'path/to/badge.png'
+                };
+
+                var notification = new Notification(title, options);
+            }
+        }
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
+    <script>
+
+        connection.start().then(function () {
+            console.log(connection)
+            localStorage.setItem("connectionId", connection.connection.connectionId)
+            connection.invoke("Register", @ViewBag.User?.Id)
+
+            //document.getElementById("sendButton").disabled = false;
+        }).catch(function (err) {
+
+            localStorage.removeItem("connectionId")
+            return console.error(err.toString());
+        });
+
+    </script>
     @await Component.InvokeAsync("NToastNotify")
     <script src="~/js/site.js"></script>
     @if ((ViewBag.User as UserListDto) != null)
     {
         <script>
-            setGroupId("@ExtensionsMethods.CalculateMD5Hash("GroupId=" + (ViewBag.User as UserListDto).Id)")
+            setGroupId("@ViewBag.User?.Id")
         </script>
     }
 </body>

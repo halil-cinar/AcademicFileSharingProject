@@ -17,6 +17,7 @@ namespace AcademicFileSharingProject.Dtos.Filters
 
         public long? UserId { get; set; }
         public bool? IsAir { get; set; }
+        public string? Search { get; set; }
 
     }
 }

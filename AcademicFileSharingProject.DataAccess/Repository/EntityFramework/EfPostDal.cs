@@ -16,7 +16,7 @@ namespace AcademicFileSharingProject.DataAccess.Repository.EntityFramework
     {
         public override IQueryable<PostEntity> BaseGetAll(DatabaseContext context)
         {
-            return base.BaseGetAll(context).Include(x=>x.User).Include(x=>x.PostImage).Include(x=>x.PostMedias);
+            return base.BaseGetAll(context).Include(x=>x.User).Include(x=>x.PostMedia).Include(x=>x.PostMedias);
         }
     }
 }

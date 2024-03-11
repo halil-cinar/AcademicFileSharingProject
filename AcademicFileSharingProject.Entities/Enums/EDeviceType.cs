@@ -11,6 +11,7 @@ namespace AcademicFileSharingProject.Entities.Enums
           None = 0,
           Web,
           Mobil,
+          WebService,
 
 
     }

@@ -44,11 +44,11 @@ namespace AcademicFileSharingProject.Business
                     entity.CreatedTime = DateTime.Now;
                     entity.IsDeleted = false;
                     entity.Id = 0;
-                    if (post.PostImage != null)
+                    if (post.PostMedia != null)
                     {
                         var mediaresult = await _mediaService.Add(new MediaDto
                         {
-                            File = post.PostImage
+                            File = post.PostMedia
                         });
                         if (mediaresult.ResultStatus == Dtos.Enums.ResultStatus.Error)
                         {
@@ -57,24 +57,9 @@ namespace AcademicFileSharingProject.Business
                             return response;
 
                         }
-                        entity.PostImageId = mediaresult.Result;
+                        entity.PostMediaId = mediaresult.Result;
                     }
-                    if (post.PostVideo != null)
-                    {
-                        var mediaresult = await _mediaService.Add(new MediaDto
-                        {
-                            File = post.PostVideo
-                        });
-                        if (mediaresult.ResultStatus == Dtos.Enums.ResultStatus.Error)
-                        {
-                            scope.Dispose();
-                            response.ErrorMessages.AddRange(mediaresult.ErrorMessages);
-                            return response;
-
-                        }
-                        entity.PostVideoId = mediaresult.Result;
-                    }
-
+                   
 
 
                     var validationResult = Validator.Validate(entity);
@@ -111,9 +96,9 @@ namespace AcademicFileSharingProject.Business
 
                     //Todo: Bildirim eklenecek
 
-                    //await _subscribeService.NotifySubscribes(entity.UserId,
-                    //   "Sayýn %user_name% %user_surname% \n %subscribeduser_name% %subscribeduser_surname% yeni bir gönderi paylaþmýþtýr",
-                    //   "Yeni Bir Bildiriminiz Var", Entities.Enums.EEntityType.Post, entity.Id);
+                    await _subscribeService.NotifySubscribes(entity.UserId,
+                       "Sayýn %user_name% %user_surname% \n %subscribeduser_name% %subscribeduser_surname% yeni bir gönderi paylaþmýþtýr",
+                       "Yeni Bir Bildiriminiz Var", Entities.Enums.EEntityType.Post, entity.Id);
                     scope.Complete();
 
 
@@ -245,7 +230,7 @@ namespace AcademicFileSharingProject.Business
         }
 
 
-        public async Task<BussinessLayerResult<PostListDto>> ChangePhoto(PostDto post)
+        public async Task<BussinessLayerResult<PostListDto>> ChangeMedia(PostDto post)
         {
             var response = new BussinessLayerResult<PostListDto>();
             try
@@ -253,15 +238,15 @@ namespace AcademicFileSharingProject.Business
                 var entity = Repository.Get(post.Id);
 
                 //Media Güncelleme
-                var mediaResult = (entity.PostImageId != null)
+                var mediaResult = (entity.PostMediaId != null)
                     ? await _mediaService.Update(new MediaDto
                     {
-                        Id= (long)entity.PostImageId,
-                        File = post.PostImage,
+                        Id= (long)entity.PostMediaId,
+                        File = post.PostMedia,
                     })
                     : await _mediaService.Add(new MediaDto
                     {
-                        File = post.PostImage,
+                        File = post.PostMedia,
                     });
 
                 if (mediaResult.ResultStatus == Dtos.Enums.ResultStatus.Error)
@@ -271,7 +256,7 @@ namespace AcademicFileSharingProject.Business
 
                 }
 
-                entity.PostImageId = (long)mediaResult.Result;
+                entity.PostMediaId = (long)mediaResult.Result;
 
 
 
@@ -298,60 +283,7 @@ namespace AcademicFileSharingProject.Business
             return response;
         }
 
-         public async Task<BussinessLayerResult<PostListDto>> ChangeVideo(PostDto post)
-        {
-            var response = new BussinessLayerResult<PostListDto>();
-            try
-            {
-                var entity = Repository.Get(post.Id);
-
-                //Media Güncelleme
-                var mediaResult = (entity.PostVideoId != null)
-                    ? await _mediaService.Update(new MediaDto
-                    {
-                        Id= (long)entity.PostVideoId,
-                        File = post.PostVideo,
-                    })
-                    : await _mediaService.Add(new MediaDto
-                    {
-                        File = post.PostVideo,
-                    });
-
-                if (mediaResult.ResultStatus == Dtos.Enums.ResultStatus.Error)
-                {
-                    response.ErrorMessages.AddRange(mediaResult.ErrorMessages);
-                    return response;
-
-                }
-
-                entity.PostVideoId = (long)mediaResult.Result;
-
-
-
-
-
-                var validationResult = Validator.Validate(entity);
-                if (!validationResult.IsValid)
-                {
-                    foreach (var item in validationResult.Errors)
-                    {
-                        response.AddError(Dtos.Enums.ErrorMessageCode.PostPostUpdateValidationError, item.ErrorMessage);
-
-                    }
-                    return response;
-                }
-
-                response.Result = Mapper.Map<PostListDto>(Repository.Update(entity));
-
-            }
-            catch (Exception ex)
-            {
-                response.AddError(Dtos.Enums.ErrorMessageCode.PostPostUpdateExceptionError, ex.Message);
-            }
-            return response;
-        }
-
-
+     
         public async Task<BussinessLayerResult<PostListDto>> ChangeFiles(PostDto post)
         {
             var response = new BussinessLayerResult<PostListDto>();

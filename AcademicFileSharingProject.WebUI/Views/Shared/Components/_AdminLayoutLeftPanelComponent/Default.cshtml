@@ -59,52 +59,71 @@
                 || ViewBag.userMethods.Contains(EMethod.UserRoleAllList)
                 || ViewBag.userMethods.Contains(EMethod.UserRoleList)
                 || ViewBag.userMethods.Contains(EMethod.UserRoleUpdate)
-                
+
                 )
                 {
                     <li class="menu-title">Kullanıcı İşlemleri</li>
 
                     <!-- /.menu-title -->
+                    @if (ViewBag.userMethods.Contains(EMethod.UserAllList)
+                   || ViewBag.userMethods.Contains(EMethod.UserAdd)
+                   || ViewBag.userMethods.Contains(EMethod.AcademicianAllList)
+                   || ViewBag.userMethods.Contains(EMethod.AcademicianAdd)
+                   )
+                    {
+                        <li class="menu-item-has-children dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-tasks"></i>Akademisyenler</a>
+                            <ul class="sub-menu children dropdown-menu">
+                                @if (ViewBag.userMethods.Contains(EMethod.UserAdd) || ViewBag.userMethods.Contains(EMethod.AcademicianAdd))
+                                {
+                                    <li><i class="menu-icon fa fa-fort-awesome"></i><a href="/Admin/Academician/Add">Akademisyen ekle</a></li>
+                                }
+                                @if (ViewBag.userMethods.Contains(EMethod.UserAllList) || ViewBag.userMethods.Contains(EMethod.AcademicianAllList))
+                                {
+                                    <li><i class="menu-icon ti-themify-logo"></i><a href="/Admin/Academician">Akademisyenleri Gör</a></li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                    @if (ViewBag.userMethods.Contains(EMethod.UserAllList)
+                   || ViewBag.userMethods.Contains(EMethod.UserAdd)
+                   || ViewBag.userMethods.Contains(EMethod.StudentAllList)
+                   || ViewBag.userMethods.Contains(EMethod.StudentAdd)
+                   )
+                    {
+                        <li class="menu-item-has-children dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-tasks"></i>Öğrenciler</a>
+                            <ul class="sub-menu children dropdown-menu">
+                                @if (ViewBag.userMethods.Contains(EMethod.UserAdd) || ViewBag.userMethods.Contains(EMethod.StudentAdd))
+                                {
+                                    <li><i class="menu-icon fa fa-fort-awesome"></i><a href="/Admin/Student/Add">Öğrenci ekle</a></li>
+                                }
+                                @if (ViewBag.userMethods.Contains(EMethod.UserAllList) || ViewBag.userMethods.Contains(EMethod.StudentAllList))
+                                {
+                                    <li><i class="menu-icon ti-themify-logo"></i><a href="/Admin/Student">Öğrencileri Gör</a></li>
+                                }
 
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-tasks"></i>Akademisyenler</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            @if (ViewBag.userMethods.Contains(EMethod.UserAdd) || ViewBag.userMethods.Contains(EMethod.AcademicianAdd))
-                            {
-                                <li><i class="menu-icon fa fa-fort-awesome"></i><a href="/Admin/Academician/Add">Akademisyen ekle</a></li>
-                            }
-                            @if (ViewBag.userMethods.Contains(EMethod.UserAllList) || ViewBag.userMethods.Contains(EMethod.AcademicianAllList))
-                            {
-                                <li><i class="menu-icon ti-themify-logo"></i><a href="/Admin/Academician">Akademisyenleri Gör</a></li>
-                            }
-                        </ul>
-                    </li>
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-tasks"></i>Öğrenciler</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            @if (ViewBag.userMethods.Contains(EMethod.UserAdd) || ViewBag.userMethods.Contains(EMethod.AcademicianAdd))
-                            {
-                                <li><i class="menu-icon fa fa-fort-awesome"></i><a href="/Admin/Student/Add">Öğrenci ekle</a></li>
-                            }
-                            @if (ViewBag.userMethods.Contains(EMethod.UserAllList) || ViewBag.userMethods.Contains(EMethod.AcademicianAllList))
-                            {
-                                <li><i class="menu-icon ti-themify-logo"></i><a href="/Admin/Student">Öğrencileri Gör</a></li>
-                            }
+                            </ul>
+                        </li>
+                    }
 
-                        </ul>
-                    </li>
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-tasks"></i>Rol İşlemleri</a>
-                        <ul class="sub-menu children dropdown-menu">
-                            
-                            @if (ViewBag.userMethods.Contains(EMethod.UserRoleAllList) || ViewBag.userMethods.Contains(EMethod.UserRoleList))
-                            {
-                                <li><i class="menu-icon ti-themify-logo"></i><a href="/Admin/User/Roles">Kullanıcı Rollerini Gör ve Güncelle</a></li>
-                            }
+                    @if (ViewBag.userMethods.Contains(EMethod.UserRoleAllList)
+                   || ViewBag.userMethods.Contains(EMethod.UserRoleAdd)
 
-                        </ul>
-                    </li>
+                   )
+                    {
+                        <li class="menu-item-has-children dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-tasks"></i>Rol İşlemleri</a>
+                            <ul class="sub-menu children dropdown-menu">
 
+                                @if (ViewBag.userMethods.Contains(EMethod.UserRoleAllList) || ViewBag.userMethods.Contains(EMethod.UserRoleList))
+                                {
+                                    <li><i class="menu-icon ti-themify-logo"></i><a href="/Admin/User/Roles">Kullanıcı Rollerini Gör ve Güncelle</a></li>
+                                }
+
+                            </ul>
+                        </li>
+                    }
                 }
                 @if (ViewBag.userMethods.Contains(EMethod.BlogAllList)
                 || ViewBag.userMethods.Contains(EMethod.BlogList)
@@ -188,6 +207,34 @@
                             </ul>
                         </li>
                     }
+                }
+                @if (ViewBag.userMethods.Contains(EMethod.SoftwareAllList)
+                || ViewBag.userMethods.Contains(EMethod.SoftwareList)
+                || ViewBag.userMethods.Contains(EMethod.SoftwareAdd)
+
+
+                )
+                {
+                    <li class="menu-title">Yazılımlar</li>
+
+                    <!-- /.menu-title -->
+                    @if (ViewBag.userMethods.Contains(EMethod.SoftwareAllList) || ViewBag.userMethods.Contains(EMethod.SoftwareList) || ViewBag.userMethods.Contains(EMethod.SoftwareAdd))
+                    {
+                        <li class="menu-item-has-children dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-tasks"></i>Yazılım İşlemleri</a>
+                            <ul class="sub-menu children dropdown-menu">
+                                @if (ViewBag.userMethods.Contains(EMethod.SoftwareAdd))
+                                {
+                                    <li><i class="menu-icon fa fa-fort-awesome"></i><a href="/Admin/Software/Add">Yazılım Paylaş</a></li>
+                                }
+                                @if (ViewBag.userMethods.Contains(EMethod.SoftwareAllList) || ViewBag.userMethods.Contains(EMethod.SoftwareList))
+                                {
+                                    <li><i class="menu-icon ti-themify-logo"></i><a href="/Admin/Software">Yazılımları Gör</a></li>
+                                }
+                            </ul>
+                        </li>
+                    }
+
                 }
                 <li class="menu-title">Mesajlar</li><!-- /.menu-title -->
                 <li class="">

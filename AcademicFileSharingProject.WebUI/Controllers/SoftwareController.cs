@@ -15,20 +15,22 @@ namespace AcademicFileSharingProject.WebUI.Controllers
             _softwareService = softwareService;
         }
 
-        [HttpGet("")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index([FromQuery] int? page, [FromQuery]string? search)
         {
             var result = await _softwareService.GetAll(new Dtos.Filters.LoadMoreFilter<Dtos.Filters.SoftwareFilter>
                 {
                 ContentCount = 10,
-                PageCount = 0,
+                PageCount = page??0,
                 Filter = new Dtos.Filters.SoftwareFilter
                 {
                     IsAir = true,
+                    Search = search
+                    
                 }
             });
             if (result.ResultStatus == Dtos.Enums.ResultStatus.Success)
             {
+                ViewBag.Search = search;
                 return View(result.Result);
             }
 

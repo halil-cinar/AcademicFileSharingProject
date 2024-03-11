@@ -43,6 +43,7 @@ namespace AcademicFileSharingProject.DataAccess.EntityFramework
         public DbSet<SystemSettingsEntity> SystemSettings { get; set; }
         public DbSet<SoftwareEntity> Softwares { get; set; }
         public DbSet<PostMediaDownloadEntity> PostMediaDownloads { get; set; }
+        public DbSet<UserDeviceEntity> UserDevices { get; set; }
 
 
     }
