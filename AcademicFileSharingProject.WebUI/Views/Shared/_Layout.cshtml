@@ -83,7 +83,7 @@
                         <a class="nav-link  @(ViewData["pageName"]=="/chat"?"active":"")" href="/chat">Mesajlar</a>
                     </li>
 
-                    @if (!ViewBag.HasSession)
+                    @if (!ViewBag.HasSession || ViewBag.HasSession==null)
                     {
                         <li class="nav-item">
                             <a class="nav-link  @(ViewData["pageName"]=="/login"?"active":"")" href="/login">Giriş Yap / Kayıt Ol</a>

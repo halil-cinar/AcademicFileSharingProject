@@ -19,15 +19,20 @@ namespace AcademicFileSharingProject.Business
 {
     public class MediaManager : ServiceBase<MediaEntity>, IMediaService
     {
+        string path = "C:/AcademicFileSharingProject.Medias";
         public MediaManager(IEntityRepository<MediaEntity> repository, IMapper mapper, BaseEntityValidator<MediaEntity> validator) : base(repository, mapper, validator)
         {
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
         }
 
 
 
 
-        string path = "wwwroot/Medias";
-
+        //string path = "wwwroot/Medias";
+        
         public async Task<BussinessLayerResult<long?>> Add(MediaDto media)
         {
             var response = new BussinessLayerResult<long?>();
